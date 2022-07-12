@@ -1,0 +1,47 @@
+.search {
+  $search-collapse-width: 50px;
+  $search-expanded-width: 300px;
+  $search-input-padding: 5px;
+  $search-height: 50px;
+  &__wrapper {
+    height: 100vh;
+    width: 100vw;
+    background-image: linear-gradient(90deg, #7d5fff, #7158e2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__group {
+    position: relative;
+    display: flex;
+  }
+  &__input {
+    padding: $search-input-padding;
+    border-radius: 10px;
+    display: flex;
+    width: $search-collapse-width;
+    height: $search-height;
+    background-color: #fff;
+    transition: width 0.3s ease;
+    &.expanded {
+      width: $search-expanded-width;
+    }
+    outline: none;
+    border: none;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: #333;
+  }
+  &__btn {
+    position: absolute;
+    border-radius: 10px;
+    border: none;
+    background-color: #fff;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    right: 0;
+    height: 100%;
+    width: calc($search-collapse-width + calc($search-input-padding * 2));
+  }
+}
