@@ -43,7 +43,6 @@ export const projects = [
     id: 9,
     title: 'Drag N Drop',
     preview: 'https://50projects50days.com/img/projects-img/21-drag-n-drop.png',
-    locked: true,
   },
   {
     id: 10,
@@ -68,9 +67,8 @@ export const projects = [
   },
   {
     id: 14,
-    title: 'Random choose picker',
+    title: 'Random choice picker',
     preview: 'https://50projects50days.com/img/projects-img/13-random-choice-picker.png',
-    locked: true,
   },
   {
     id: 15,
@@ -81,7 +79,6 @@ export const projects = [
     id: 16,
     title: 'Movie App',
     preview: 'https://50projects50days.com/img/projects-img/17-movie-app.png',
-    locked: true,
   },
   {
     id: 17,
@@ -98,13 +95,11 @@ export const projects = [
     id: 19,
     title: 'Button Ripple Effect',
     preview: 'https://50projects50days.com/img/projects-img/20-button-ripple-effect.png',
-    locked: true,
   },
   {
     id: 20,
     title: 'Drawing App',
     preview: 'https://50projects50days.com/img/projects-img/22-drawing-app.png',
-    locked: true,
   },
   {
     id: 21,
@@ -117,26 +112,49 @@ export const projects = [
     preview: 'https://50projects50days.com/img/projects-img/24-content-placeholder.png',
   },
   {
-    id: 24,
+    id: 23,
     title: 'Sticky Navbar',
     preview: 'https://50projects50days.com/img/projects-img/25-sticky-navbar.png',
   },
   {
-    id: 25,
+    id: 24,
     title: 'Github Profiles',
     preview: 'https://50projects50days.com/img/projects-img/28-github-profiles.png',
-    locked: true,
   },
   {
-    id: 26,
-    title: 'Toast Notification',
-    preview: 'https://50projects50days.com/img/projects-img/27-toast-notification.png',
-    locked: true,
-  },
-  {
-    id: 26,
+    id: 25,
     title: 'Double Click Heart',
     preview: 'https://50projects50days.com/img/projects-img/29-double-click-heart.png',
     locked: true,
+  },
+  {
+    id: 26,
+    title: 'Image Carousel',
+    preview: 'https://50projects50days.com/img/projects-img/35-image-carousel.png',
+  },
+  {
+    id: 27,
+    title: 'Double Vertical Slider',
+    preview: 'https://50projects50days.com/img/projects-img/26-double-vertical-slider.png',
+  },
+  {
+    id: 28,
+    title: 'Toast Notification',
+    preview: 'https://50projects50days.com/img/projects-img/27-toast-notification.png',
+  },
+  {
+    id: 29,
+    title: 'Auto Text Effect',
+    preview: 'https://50projects50days.com/img/projects-img/30-auto-text-effect.png',
+  },
+  {
+    id: 30,
+    title: 'Password Generator',
+    preview: 'https://50projects50days.com/img/projects-img/31-password-generator.png',
+  },
+  {
+    id: 31,
+    title: 'Good Cheap Fast',
+    preview: 'https://50projects50days.com/img/projects-img/32-good-cheap-fast.png',
   },
 ];

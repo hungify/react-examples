@@ -30,23 +30,41 @@ const Item = styled.div<ItemProps>`
   height: 100%;
   width: 100%;
   cursor: pointer;
-  background-image: url('https://images.unsplash.com/photo-1655747508339-7cc94a19ac2b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY1NzUxNTU5Mw&ixlib=rb-1.2.1&q=80&w=150');
 `;
+const url =
+  "url('https://images.unsplash.com/photo-1655747508339-7cc94a19ac2b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY1NzUxNTU5Mw&ixlib=rb-1.2.1&q=80&w=150')";
+
 export default function DragNDrop() {
   const itemRef = useRef(null);
-  const [data, setData] = useState([]);
-  const [dragStartIndex, setDragStartIndex] = useState<number>();
+  const [dragStartIndex, setDragStartIndex] = useState<number>(0);
+  const [isOver, setIsOver] = useState(false);
 
   const onDrag = (e: React.DragEvent<HTMLDivElement>) => {};
   const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    const element = e.currentTarget;
-    const idx = element.dataset.index;
-    setDragStartIndex(Number(idx));
+    const target = e.target as HTMLDivElement;
+    target.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', target.id);
   };
-  const onDragEnd = (e: React.DragEvent<HTMLDivElement>) => {};
-  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {};
-  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {};
-  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {};
+  const onDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    target.classList.remove('dragging');
+    e.dataTransfer.clearData();
+  };
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    
+  };
+  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    target.classList.remove('over');
+    setIsOver(false);
+  };
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    if (e.dataTransfer.types.includes('text/plain')) {
+      e.preventDefault();
+      setIsOver(true);
+    }
+  };
+
   return (
     <Wrapper>
       <Inner>
@@ -55,6 +73,9 @@ export default function DragNDrop() {
           .map((_, idx) => (
             <Box key={idx} onDragStart={(idx) => onDragStart(idx)} onDrop={(idx) => onDrop(idx)}>
               <Item
+                style={{
+                  backgroundImage: idx === dragStartIndex ? url : '',
+                }}
                 ref={itemRef}
                 draggable={true}
                 onDrag={onDrag}
