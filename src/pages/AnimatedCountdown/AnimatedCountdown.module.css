@@ -1,5 +1,4 @@
 .wrapper {
-  font-family: 'Roboto', sans-serif;
   margin: 0;
   height: 100vh;
   overflow: hidden;
@@ -8,7 +7,6 @@
 h4 {
   font-size: 20px;
   margin: 5px;
-  text-transform: uppercase;
 }
 
 .counter {
@@ -45,6 +43,15 @@ h4 {
 .final.show {
   transform: translate(-50%, -50%) scale(1);
   animation: show 0.2s ease-out;
+}
+
+.final button {
+  color: #000;
+  background-color: #ccc;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 1px 6px;
+  cursor: pointer;
 }
 
 @keyframes show {

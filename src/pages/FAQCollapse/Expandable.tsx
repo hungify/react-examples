@@ -109,9 +109,9 @@ function Icon({ className = '', expanded, ...otherProps }: IconProps) {
       {expanded ? (
         expanded
       ) : expandableContext?.expanded ? (
-        <MdKeyboardArrowDown />
+        <MdKeyboardArrowDown className="Expandable-icon" />
       ) : (
-        <MdKeyboardArrowUp />
+        <MdKeyboardArrowUp className="Expandable-icon" />
       )}
     </button>
   );

@@ -1,52 +1,50 @@
 import Expandable from 'pages/FAQCollapse/Expandable';
 import { useState } from 'react';
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  max-width: 600px;
-  margin: 0 auto;
-`;
 
 const information = [
   {
-    header: 'Why everyone should live forever',
-    note: 'This is highly sensitive information ... !!!!',
+    title: `Why shouldn't we trust atoms?`,
+    text: 'They make up everything',
   },
   {
-    header: 'The internet disappears',
-    note: 'I just uncovered the biggest threat...',
+    title: 'What do you call someone with no body and no nose?',
+    text: 'Nobody knows',
   },
   {
-    header: 'The truth about Elon musk and Mars!',
-    note: 'Nobody tells you this...',
+    title: `What's the object-oriented way to become wealthy?`,
+    text: 'inheritance',
   },
 ];
 
 export default function FAQCollapse() {
-  const [activeIndex, setActiveIndex] = useState<number | undefined>(undefined);
+  const [activeIndex, setActiveIndex] = useState<number[] | undefined>([]);
   const handleExpand = (evt?: React.MouseEvent | boolean) => {
     if (evt && typeof evt !== 'boolean' && evt.target instanceof HTMLElement) {
       const index = Number(evt.target.dataset?.index);
-      setActiveIndex(index);
+      if (activeIndex && activeIndex.includes(index)) {
+        setActiveIndex(activeIndex.filter((i) => i !== index));
+      } else {
+        setActiveIndex([...(activeIndex || []), index]);
+      }
     }
   };
   return (
-    <Wrapper>
-      <h2>Frequently Asked Questions</h2>
-      {information?.map(({ header, note }, index) => (
+    <div className="mx-auto my-0 max-w-[600px]">
+      <h1 className="text-center font-medium">Frequently Asked Questions</h1>
+      {information?.map(({ title, text }, index) => (
         <Expandable
-          shouldExpand={index === activeIndex}
+          shouldExpand={activeIndex?.indexOf(index) !== -1}
           onExpand={handleExpand}
           key={index}
-          className={`${index === activeIndex ? 'Expandable-active' : ''}`}
+          className={`${activeIndex?.indexOf(index) !== -1 ? 'Expandable-active' : ''}`}
         >
           <Expandable.Header>
-            <h3>{header}</h3>
+            <h3>{title}</h3>
           </Expandable.Header>
           <Expandable.Icon data-index={index} />
-          <Expandable.Body>{note}</Expandable.Body>
+          <Expandable.Body>{text}</Expandable.Body>
         </Expandable>
       ))}
-    </Wrapper>
+    </div>
   );
 }

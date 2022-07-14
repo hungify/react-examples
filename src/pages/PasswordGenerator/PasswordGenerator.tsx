@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { FiClipboard } from 'react-icons/fi';
 import { useState } from 'react';
-import { isTemplateHead } from 'typescript';
+import { FiClipboard } from 'react-icons/fi';
+import styled from 'styled-components';
+
 const Wrapper = styled.div`
   height: 100vh;
   background-color: #3b3b98;
@@ -58,6 +58,8 @@ const Setting = styled.li`
   align-items: center;
   margin: 15px 0;
   input {
+    color: #000;
+    outline: none;
     width: 50px;
   }
 `;

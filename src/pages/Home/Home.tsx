@@ -12,8 +12,8 @@ const Wrapper = styled.div`
 export default function Home() {
   return (
     <Wrapper>
-      {projects.map((p) => (
-        <Card title={p.title} preview={p.preview} locked={p.locked} />
+      {projects.map((p, index) => (
+        <Card title={p.title} preview={p.preview} locked={p.locked} key={index} />
       ))}
     </Wrapper>
   );
@@ -32,7 +32,9 @@ function Card({ title, preview, locked = false }: CardProps) {
       <Content>
         <h4>{title}</h4>
         {!locked && (
-          <LinkStyled to={title.toLowerCase().replaceAll(' ', '-')}>Live Demo</LinkStyled>
+          <LinkStyled to={`projects/${title.toLowerCase().replaceAll(' ', '-')}`}>
+            Live Demo
+          </LinkStyled>
         )}
       </Content>
     </Container>

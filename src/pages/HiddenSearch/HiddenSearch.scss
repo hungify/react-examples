@@ -33,6 +33,8 @@
     color: #333;
   }
   &__btn {
+    display: flex;
+    align-items: center;
     position: absolute;
     border-radius: 10px;
     border: none;

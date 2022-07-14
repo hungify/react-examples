@@ -10,8 +10,6 @@ function Card({ title }: { title: number }) {
   const entry = useIntersectionObserver(ref, {});
   const isVisible = !!entry?.isIntersecting;
 
-  console.log(`Render Section`, { isVisible });
-
   return (
     <div className={cx('card')} ref={ref}>
       <h3 className={cx('heading')}>ScrollAnimation</h3>

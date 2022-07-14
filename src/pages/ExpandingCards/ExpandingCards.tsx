@@ -1,5 +1,5 @@
 import { cards } from 'mocks/cards';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -11,10 +11,6 @@ const Wrapper = styled.div`
 
 export default function ExpandingCards() {
   const [indexActive, setIndexActive] = useState(cards[0].id);
-
-  useEffect(() => {
-    document.title = 'Expanding Cards';
-  }, []);
 
   const handleExpand = (id: number) => {
     if (id !== indexActive) {

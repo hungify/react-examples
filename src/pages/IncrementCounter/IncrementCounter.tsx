@@ -1,7 +1,6 @@
-import styled from 'styled-components';
-import { GrTwitter } from 'react-icons/gr';
-import { useEffect, useRef, useState } from 'react';
 import { socials } from 'mocks/socials';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
   height: 100vh;

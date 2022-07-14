@@ -27,7 +27,8 @@ const Button = styled.button`
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(90deg, #89f7fe 0%, #66a6ff 100%);
+  background: #5c34a4;
+  color: #ccc;
   .circle {
     position: absolute;
     background-color: #fff;
@@ -35,30 +36,31 @@ const Button = styled.button`
     height: 100px;
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
-    animation: ${scale} 0.5s ease-out;
+    animation: ${scale} 0.8s ease-out;
   }
 `;
 
 export default function ButtonRippleEffect() {
   const handleClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
-    const x = evt.clientX;
 
+    const x = evt.clientX;
     const y = evt.clientY;
 
     const buttonTop = evt.currentTarget.getBoundingClientRect().top;
     const buttonLeft = evt.currentTarget.getBoundingClientRect().left;
 
     const xPos = x - buttonLeft;
-
     const yPos = y - buttonTop;
-    const circle = document.createElement('span');
-    circle.classList.add('circle');
-    circle.style.top = yPos + 'px';
-    circle.style.left = xPos + 'px';
 
-    evt.currentTarget.appendChild(circle);
+    const circleRef = document.createElement('span');
+    circleRef.style.top = yPos + 'px';
+    circleRef.style.left = xPos + 'px';
+    circleRef.className = 'circle';
+    evt.currentTarget.appendChild(circleRef);
 
-    setTimeout(() => circle.remove(), 500);
+    setTimeout(() => {
+      circleRef.remove();
+    }, 500);
   };
   return (
     <Wrapper>

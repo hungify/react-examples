@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  width: 100vw;
   height: 100vh;
   position: relative;
 `;
@@ -16,7 +15,6 @@ const BackgroundOverlay = styled.div<Background>`
   background-position: center;
   background-repeat: no-repeat;
   height: 100vh;
-  width: 100vw;
   ${({ $blur }) => `
     filter: blur(${$blur}px);
   `}
@@ -24,7 +22,10 @@ const BackgroundOverlay = styled.div<Background>`
   transition: filter 0.5s ease-in;
 `;
 
-const TextOverlay = styled.div<Background>`
+interface Text {
+  $opacity: number;
+}
+const TextOverlay = styled.div<Text>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -34,29 +35,39 @@ const TextOverlay = styled.div<Background>`
   font-size: 50px;
   color: #fff;
   transition: opacity 0.5s ease-in-out;
-  ${({ $blur }) => `
-    opacity: ${$blur > 5 ? 1 : 0};
+  ${({ $opacity }) => `
+    opacity: ${$opacity};
   `}
 `;
 
+function scale(number: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+  return ((number - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+}
+
 export default function BlurryLoading() {
-  const [blur, setBlur] = useState(50);
+  const [blur, setBlur] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setBlur((blur) => blur - 1);
-    }, 100);
-    if (blur === 0) {
+      setBlur((blur) => blur + 1);
+    }, 30);
+    if (blur === 100) {
       clearInterval(interval);
       return;
     }
     return () => clearInterval(interval);
   }, [blur]);
 
+  const scaleValue = useMemo(() => {
+    const opacity = scale(blur, 0, 100, 1, 0);
+    const filter = scale(blur, 0, 100, 30, 0);
+    return { filter, opacity };
+  }, [blur]);
+
   return (
     <Wrapper>
-      <BackgroundOverlay $blur={blur} />
-      <TextOverlay $blur={blur}>{blur}%</TextOverlay>
+      <BackgroundOverlay $blur={scaleValue.filter} />
+      <TextOverlay $opacity={scaleValue.opacity}>{blur}%</TextOverlay>
     </Wrapper>
   );
 }

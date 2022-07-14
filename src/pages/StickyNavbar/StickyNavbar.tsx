@@ -20,7 +20,7 @@ export default function StickyNavbar() {
           })}
         >
           <h1 className={cx('logo')}>
-            <a href="/index.html">My Website</a>
+            <Link to="#">My Website</Link>
           </h1>
           <ul>
             <li>

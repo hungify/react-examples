@@ -10,7 +10,7 @@ export default function ContentPlaceholder() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowSkeleton(false);
-    }, 20000);
+    }, 2000);
     return () => clearTimeout(timeout);
   }, []);
 

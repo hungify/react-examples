@@ -54,10 +54,7 @@ export default function DrawingApp() {
     const ctx = ctxRef.current?.getContext('2d');
     if (ctx && canvas) {
       const x = e.clientX - canvas.offsetLeft;
-      console.log('🚀 :: e.clientX ', e.clientX);
-      console.log('🚀 ::  canvas.offsetLeft', canvas.offsetLeft);
-      console.log('🚀 ::  x ', x);
-      const y = e.clientY - canvas.offsetTop;
+      const y = e.clientY - canvas.offsetTop + 60;
 
       ctx.beginPath();
       ctx.moveTo(x, y);
@@ -70,7 +67,7 @@ export default function DrawingApp() {
 
     if (isDrawing && ctx && canvas) {
       const x = e.clientX - canvas.offsetLeft;
-      const y = e.clientY - canvas.offsetTop;
+      const y = e.clientY - canvas.offsetTop + 60;
       ctx.lineTo(x, y);
 
       ctx.lineWidth = widthLine;
