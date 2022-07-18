@@ -41,7 +41,7 @@ const Button = styled.button`
 `;
 
 export default function ButtonRippleEffect() {
-  const handleClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 
     const x = evt.clientX;
     const y = evt.clientY;

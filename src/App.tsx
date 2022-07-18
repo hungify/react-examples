@@ -1,12 +1,17 @@
 import Navigation from 'components/Navigation';
 import MainLayout from 'layouts/MainLayout';
+import QuizApp from 'pages/ QuizApp/QuizApp';
 import AnimatedCountdown from 'pages/AnimatedCountdown/AnimatedCountdown';
+import AnimatedNavigation from 'pages/AnimatedNavigation';
 import AutoTextEffect from 'pages/AutoTextEffect';
+import BackgroundBoxes from 'pages/BackgroundBoxes';
 import BackgroundSlider from 'pages/BackgroundSlider';
 import BlurryLoading from 'pages/BlurryLoading';
 import ButtonRippleEffect from 'pages/ButtonRippleEffect';
 import ContentPlaceholder from 'pages/ContentPlaceholder';
+import CustomRangeSlider from 'pages/CustomRangeSlider';
 import DadJokes from 'pages/DadJokes';
+import DoubleClickHeart from 'pages/DoubleClickHeart';
 import DoubleVerticalSlider from 'pages/DoubleVerticalSlider';
 import DragNDrop from 'pages/DragNDrop';
 import DrawingApp from 'pages/DrawingApp';
@@ -14,25 +19,36 @@ import DrinkWater from 'pages/DrinkWater';
 import EventKeyCodes from 'pages/EventKeyCodes';
 import ExpandingCards from 'pages/ExpandingCards';
 import FAQCollapse from 'pages/FAQCollapse';
+import FeedbackUIDesign from 'pages/FeedbackUIDesign';
 import FormWave from 'pages/FormWave';
 import GithubProfiles from 'pages/GithubProfiles';
 import GoodCheapFast from 'pages/GoodCheapFast';
 import HiddenSearch from 'pages/HiddenSearch';
 import Home from 'pages/Home';
+import Hoverboard from 'pages/Hoverboard';
 import ImageCarousel from 'pages/ImageCarousel';
 import IncrementCounter from 'pages/IncrementCounter';
+import InsectCatchGame from 'pages/InsectCatchGame';
 import KineticLoader from 'pages/KineticLoader';
 import LiveUserFilter from 'pages/LiveUserFilter';
+import MobileTabNavigation from 'pages/MobileTabNavigation';
 import MovieApp from 'pages/MovieApp';
+import NetflixMobileNavigation from 'pages/NetflixMobileNavigation';
+import NotesApp from 'pages/NotesApp';
 import PasswordGenerator from 'pages/PasswordGenerator';
+import PasswordStrengthBackground from 'pages/PasswordStrengthBackground';
+import Pokedex from 'pages/Pokedex';
 import ProgressStep from 'pages/ProgressStep';
 import RandomChoicePicker from 'pages/RandomChoicePicker';
+import RandomImageFeed from 'pages/RandomImageFeed';
 import ScrollAnimation from 'pages/ScrollAnimation';
 import SoundBoard from 'pages/SoundBoard';
 import SplitLanding from 'pages/SplitLanding';
 import StickyNavbar from 'pages/StickyNavbar/StickyNavbar';
 import TestimonialBoxSwitcher from 'pages/TestimonialBoxSwitcher';
 import ToastNotification from 'pages/ToastNotification';
+import TodoApp from 'pages/TodoApp';
+import VerifyAccountUI from 'pages/VerifyAccountUI';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -74,7 +90,31 @@ function App() {
           <Route path="sound-board" element={<SoundBoard />} />
           <Route path="testimonial-box-switcher" element={<TestimonialBoxSwitcher />} />
           <Route path="live-user-filter" element={<LiveUserFilter />} />
+          <Route path="notes-app" element={<NotesApp />} />
+          <Route path="random-image-feed" element={<RandomImageFeed />} />
+          <Route path="mobile-tab-navigation" element={<MobileTabNavigation />} />
+          <Route path="verify-account-ui" element={<VerifyAccountUI />} />
+          <Route path="hoverboard" element={<Hoverboard />} />
+          <Route path="quiz-app" element={<QuizApp />} />
+          <Route path="todo-list" element={<TodoApp />} />
+          <Route path="feedback-ui-design" element={<FeedbackUIDesign />} />
+          <Route path="netflix-mobile-navigation" element={<NetflixMobileNavigation />} />
+          <Route path="password-strength-background" element={<PasswordStrengthBackground />} />
+          <Route path="custom-range-slider" element={<CustomRangeSlider />} />
+          <Route path="animated-navigation" element={<AnimatedNavigation />} />
+          <Route path="pokedex" element={<Pokedex />} />
+          <Route path="double-click-heart" element={<DoubleClickHeart />} />
+          <Route path="3d-background-boxes" element={<BackgroundBoxes />} />
+          <Route path="insect-catch-game" element={<InsectCatchGame />} />
         </Route>
+        <Route
+          path="*"
+          element={
+            <div>
+              <h1>404</h1>
+            </div>
+          }
+        />
       </Route>
     </Routes>
   );

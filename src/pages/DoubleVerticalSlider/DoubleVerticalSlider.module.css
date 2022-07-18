@@ -51,7 +51,7 @@
   width: 100%;
 }
 
-button {
+.action-buttons button {
   background-color: #fff;
   border: none;
   color: #aaa;
@@ -60,7 +60,7 @@ button {
   padding: 15px;
 }
 
-button:hover {
+.action-buttons button:hover {
   color: #222;
 }
 

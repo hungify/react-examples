@@ -48,12 +48,12 @@ export default function Navigation({ children }: NavigationProps) {
 
   return (
     <>
-      <div className="p-3 flex justify-between shadow-neutral-800">
+      <div className="flex justify-between p-3 shadow-neutral-800 ">
         <button
           className=" bg-[#e1e7ff] rounded-md p-2 inline-flex items-center justify-center  hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 text-[#554ca6]"
           onClick={handleGoHome}
         >
-          <HiOutlineHome className="h-5 w-5" />
+          <HiOutlineHome className="w-5 h-5" />
         </button>
         <div className="flex items-center font-medium">
           <span>{title}</span>
@@ -63,7 +63,7 @@ export default function Navigation({ children }: NavigationProps) {
           onClick={handleGoPrevious}
           disabled={title === projects[0].title}
         >
-          <HiOutlineArrowSmLeft className="h-5 w-5" />
+          <HiOutlineArrowSmLeft className="w-5 h-5" />
           <span className="font-semibold">Previous</span>
         </button>
 
@@ -73,7 +73,7 @@ export default function Navigation({ children }: NavigationProps) {
           // disabled={title === projects[projects.length - 1]}
           disabled={title === 'Live User Filter'}
         >
-          <HiOutlineArrowSmRight className="h-5 w-5" />
+          <HiOutlineArrowSmRight className="w-5 h-5" />
           <span className="font-semibold">Next</span>
         </button>
       </div>

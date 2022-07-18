@@ -30,6 +30,10 @@ const Toolbox = styled.div`
   }
 `;
 
+const Button = styled.button`
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+`;
+
 export default function DrawingApp() {
   const [widthLine, setWidthLine] = useState(5);
   const [colorLine, setColorLine] = useState('#000');
@@ -41,7 +45,13 @@ export default function DrawingApp() {
     if (type === 'increase') {
       setWidthLine(widthLine + 5);
     } else if (type === 'decrease') {
-      setWidthLine(widthLine - 5);
+      setWidthLine((prev) => {
+        if (prev === 5) {
+          return widthLine;
+        } else {
+          return prev - 5;
+        }
+      });
     }
   };
   const handleColorLineChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,8 +63,8 @@ export default function DrawingApp() {
     const canvas = ctxRef.current;
     const ctx = ctxRef.current?.getContext('2d');
     if (ctx && canvas) {
-      const x = e.clientX - canvas.offsetLeft;
-      const y = e.clientY - canvas.offsetTop + 60;
+      const x = e.nativeEvent.offsetX;
+      const y = e.nativeEvent.offsetY;
 
       ctx.beginPath();
       ctx.moveTo(x, y);
@@ -66,8 +76,8 @@ export default function DrawingApp() {
     const ctx = ctxRef.current?.getContext('2d');
 
     if (isDrawing && ctx && canvas) {
-      const x = e.clientX - canvas.offsetLeft;
-      const y = e.clientY - canvas.offsetTop + 60;
+      const x = e.nativeEvent.offsetX;
+      const y = e.nativeEvent.offsetY;
       ctx.lineTo(x, y);
 
       ctx.lineWidth = widthLine;
@@ -109,11 +119,15 @@ export default function DrawingApp() {
         onMouseUp={stopDraw}
       ></Canvas>
       <Toolbox>
-        <button onClick={handleChangeWithLine('decrease')}>-</button>
+        <Button onClick={handleChangeWithLine('decrease')} disabled={widthLine === 5}>
+          -
+        </Button>
         <div>{widthLine}</div>
-        <button onClick={handleChangeWithLine('increase')}>+</button>
+        <Button onClick={handleChangeWithLine('increase')} disabled={widthLine === 30}>
+          +
+        </Button>
         <input type="color" value={colorLine} onChange={handleColorLineChange} />
-        <button onClick={handleClearCanvas}>X</button>
+        <Button onClick={handleClearCanvas}>X</Button>
       </Toolbox>
     </Wrapper>
   );

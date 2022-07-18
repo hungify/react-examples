@@ -51,7 +51,7 @@ export default function DragNDrop() {
     e.dataTransfer.clearData();
   };
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    
+
   };
   const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     const target = e.target as HTMLDivElement;

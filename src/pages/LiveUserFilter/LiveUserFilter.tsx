@@ -1,4 +1,4 @@
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 
 interface User {
   id: number;
@@ -19,7 +19,7 @@ export default function LiveUserFilter() {
   const [users, setUsers] = useState<User[]>([]);
   const [isPending, startTransition] = useTransition();
   const [isFetching, setIsFetching] = useState(true);
-  const [filters, setFilters] = useState<User[]>([]);
+  const [filterText, setFilterText] = useState('');
 
   useEffect(() => {
     setIsFetching(true);
@@ -29,26 +29,23 @@ export default function LiveUserFilter() {
       setUsers(data.results);
       setIsFetching(false);
     };
-    if (!searchTerm) fetchUsers();
-  }, [searchTerm]);
+    if (!filterText) fetchUsers();
+  }, [filterText]);
+
+  const usersMatch = useMemo(() => {
+    return users.filter(
+      (user) =>
+        user.name.first.concat(' ').concat(user.name.last).includes(filterText) ||
+        user.location.city.includes(filterText) ||
+        user.location.country.includes(filterText)
+    );
+  }, [users, filterText]);
 
   const handleSearchTermChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const value = evt.target.value;
+    setSearchTerm(value);
     startTransition(() => {
-      const value = evt.target.value;
-      setSearchTerm(value);
-      if (value && users.length > 0) {
-        const usersMatch = users.filter(
-          (user) =>
-            user.name.first.includes(value) ||
-            user.name.last.includes(value) ||
-            user.location.city.includes(value) ||
-            user.location.country.includes(value)
-        );
-        setFilters(users);
-        setUsers(usersMatch);
-      } else {
-        setUsers(filters);
-      }
+      setFilterText(value);
     });
   };
 
@@ -75,7 +72,7 @@ export default function LiveUserFilter() {
                 <h4 className="font-medium">Loading...</h4>
               </li>
             ))}
-          {users.map((user, i) => (
+          {usersMatch.map((user, i) => (
             <li className="flex p-5" key={i}>
               <img
                 src={user.picture.large}
