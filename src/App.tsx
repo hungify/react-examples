@@ -41,6 +41,7 @@ import Pokedex from 'pages/Pokedex';
 import ProgressStep from 'pages/ProgressStep';
 import RandomChoicePicker from 'pages/RandomChoicePicker';
 import RandomImageFeed from 'pages/RandomImageFeed';
+import RotatingNavigationAnimation from 'pages/RotatingNavigationAnimation';
 import ScrollAnimation from 'pages/ScrollAnimation';
 import SoundBoard from 'pages/SoundBoard';
 import SplitLanding from 'pages/SplitLanding';
@@ -106,6 +107,7 @@ function App() {
           <Route path="double-click-heart" element={<DoubleClickHeart />} />
           <Route path="3d-background-boxes" element={<BackgroundBoxes />} />
           <Route path="insect-catch-game" element={<InsectCatchGame />} />
+          <Route path="rotating-navigation-animation" element={<RotatingNavigationAnimation />} />
         </Route>
         <Route
           path="*"

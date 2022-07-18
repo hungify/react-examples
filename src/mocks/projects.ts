@@ -165,7 +165,7 @@ export const projects = [
     id: 28,
     title: 'Toast Notification',
     preview: 'https://50projects50days.com/img/projects-img/27-toast-notification.png',
-    locked: true,
+    locked: false,
   },
   {
     id: 29,
@@ -225,13 +225,13 @@ export const projects = [
     id: 37,
     title: 'Mobile Tab Navigation',
     preview: 'https://50projects50days.com/img/projects-img/38-mobile-tab-navigation.png',
-    locked: true,
+    locked: false,
   },
   {
     id: 38,
     title: 'Password Strength Background',
     preview: 'https://50projects50days.com/img/projects-img/39-password-strength-background.png',
-    locked: true,
+    locked: false,
   },
   {
     id: 39,
@@ -303,6 +303,12 @@ export const projects = [
     id: 49,
     title: 'Insect Catch Game',
     preview: 'https://50projects50days.com/img/projects-img/50-insect-catch-game.png',
+    locked: false,
+  },
+  {
+    id: 50,
+    title: 'Rotating Navigation Animation',
+    preview: 'https://50projects50days.com/img/projects-img/3-rotating-navigation-animation.png',
     locked: false,
   },
 ];
