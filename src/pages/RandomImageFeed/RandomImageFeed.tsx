@@ -23,7 +23,11 @@ function LazyLoadImage({ src, alt }: LazyLoadImageProps) {
     }
   }, [entry?.intersectionRatio, isVisible, src]);
 
-  return <img ref={imgRef} alt={alt || 'random'} className="h-[300px] w-[300px] object-cover" />;
+  return (
+    <div className="border-2 w-[300px] ">
+      <img ref={imgRef} alt={alt || 'random'} className="h-[300px] w-[300px] object-cover" />
+    </div>
+  );
 }
 
 export default function RandomImageFeed() {

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -15,11 +15,20 @@ const Inner = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: #fff;
   width: 150px;
   height: 150px;
   margin: 10px;
   border: 3px solid #111;
+  cursor: move;
+
+  &.hovered {
+    background-color: #333;
+    border-color: white;
+    border-style: dashed;
+  }
+  &.empty {
+    background-color: #fff;
+  }
 `;
 
 interface ItemProps {
@@ -29,61 +38,66 @@ interface ItemProps {
 const Item = styled.div<ItemProps>`
   height: 100%;
   width: 100%;
-  cursor: pointer;
+  &.hold {
+    border: solid 5px #ccc;
+  }
 `;
 const url =
   "url('https://images.unsplash.com/photo-1655747508339-7cc94a19ac2b?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY1NzUxNTU5Mw&ixlib=rb-1.2.1&q=80&w=150')";
 
 export default function DragNDrop() {
-  const itemRef = useRef(null);
-  const [dragStartIndex, setDragStartIndex] = useState<number>(0);
-  const [isOver, setIsOver] = useState(false);
+  const [dragIndex, setDragIndex] = useState<number>(0);
+  const [hoverIndex, setHoverIndex] = useState<number>(-1);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  const onDrag = (e: React.DragEvent<HTMLDivElement>) => {};
-  const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLDivElement;
-    target.classList.add('dragging');
-    e.dataTransfer.setData('text/plain', target.id);
+  const onDropCard = (idx: number) => {
+    setDragIndex(idx);
+    setIsDragging(false);
+    setHoverIndex(-1);
   };
-  const onDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLDivElement;
-    target.classList.remove('dragging');
-    e.dataTransfer.clearData();
+  const onDragEnterCard = (idx: number) => {
+    setHoverIndex(idx);
+    setDragIndex(idx);
+    setIsDragging(true);
   };
-  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
-
+  const onDragLeaveCard = () => {
+    setHoverIndex(-1);
   };
-  const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLDivElement;
-    target.classList.remove('over');
-    setIsOver(false);
+  const onDragOverCard = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
   };
-  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    if (e.dataTransfer.types.includes('text/plain')) {
-      e.preventDefault();
-      setIsOver(true);
-    }
+  const onDragStartItem = (e: React.DragEvent<HTMLDivElement>) => {
+    const currentItem = e.currentTarget;
+    currentItem.classList.add('hold');
+    setTimeout(() => {
+      currentItem.classList.remove('hold');
+    });
+  };
+  const onDragEndItem = () => {
+    setIsDragging(false);
   };
 
   return (
     <Wrapper>
       <Inner>
-        {Array(4)
+        {Array(5)
           .fill(0)
           .map((_, idx) => (
-            <Box key={idx} onDragStart={(idx) => onDragStart(idx)} onDrop={(idx) => onDrop(idx)}>
+            <Box
+              key={idx}
+              className={idx === hoverIndex ? 'hovered' : 'empty'}
+              onDragOver={onDragOverCard}
+              onDragEnter={() => onDragEnterCard(idx)}
+              onDragLeave={onDragLeaveCard}
+              onDrop={() => onDropCard(idx)}
+            >
               <Item
                 style={{
-                  backgroundImage: idx === dragStartIndex ? url : '',
+                  backgroundImage: idx === dragIndex && !isDragging ? url : '',
                 }}
-                ref={itemRef}
-                draggable={true}
-                onDrag={onDrag}
-                onDragStart={onDragStart}
-                onDragEnd={onDragEnd}
-                onDragLeave={onDragLeave}
-                onDragOver={onDragOver}
-                onDrop={onDrop}
+                draggable={idx === dragIndex}
+                onDragStart={onDragStartItem}
+                onDragEnd={onDragEndItem}
               />
             </Box>
           ))}

@@ -51,7 +51,7 @@ export const projects = [
     id: 9,
     title: 'Drag N Drop',
     preview: 'https://50projects50days.com/img/projects-img/21-drag-n-drop.png',
-    locked: true,
+    locked: false,
   },
   {
     id: 10,
@@ -105,7 +105,7 @@ export const projects = [
     id: 18,
     title: 'Theme Clock',
     preview: 'https://50projects50days.com/img/projects-img/19-theme-clock.png',
-    locked: true,
+    locked: false,
   },
   {
     id: 19,
@@ -201,7 +201,7 @@ export const projects = [
     id: 32,
     title: 'Animated Countdown',
     preview: 'https://50projects50days.com/img/projects-img/34-animated-countdown.png',
-    locked: true,
+    locked: false,
   },
   {
     id: 34,
@@ -243,7 +243,7 @@ export const projects = [
     id: 40,
     title: 'Verify Account UI',
     preview: 'https://50projects50days.com/img/projects-img/41-verify-account-ui.png',
-    locked: true,
+    locked: false,
   },
   {
     id: 41,

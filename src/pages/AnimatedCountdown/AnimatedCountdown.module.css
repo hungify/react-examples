@@ -38,9 +38,6 @@ h4 {
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
   text-align: center;
-}
-
-.final.show {
   transform: translate(-50%, -50%) scale(1);
   animation: show 0.2s ease-out;
 }
@@ -87,11 +84,11 @@ h4 {
 
 .nums span.in {
   transform: translate(-50%, -50%) rotate(0deg);
-  animation: goIn 0.5s ease-in-out;
+  animation: goIn 1s ease-in-out;
 }
 
 .nums span.out {
-  animation: goOut 0.5s ease-in-out;
+  animation: goOut 1s ease-in-out;
 }
 
 @keyframes goIn {

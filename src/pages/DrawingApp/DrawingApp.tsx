@@ -1,4 +1,11 @@
 import { useRef, useState } from 'react';
+import {
+  TiArrowBackOutline,
+  TiArrowForwardOutline,
+  TiMinus,
+  TiPlus,
+  TiTimes,
+} from 'react-icons/ti';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -38,7 +45,7 @@ export default function DrawingApp() {
   const [widthLine, setWidthLine] = useState(5);
   const [colorLine, setColorLine] = useState('#000');
   const [isDrawing, setIsDrawing] = useState(false);
-
+  const [storeDrawing, setStoreDrawing] = useState<ImageData[]>([]);
   const ctxRef = useRef<HTMLCanvasElement>(null);
 
   const handleChangeWithLine = (type: string) => () => {
@@ -63,11 +70,21 @@ export default function DrawingApp() {
     const canvas = ctxRef.current;
     const ctx = ctxRef.current?.getContext('2d');
     if (ctx && canvas) {
+      // const clientX = e.clientX;
+      // const clientY = e.clientY;
+
+      // const buttonTop = e.currentTarget.getBoundingClientRect().top;
+      // const buttonLeft = e.currentTarget.getBoundingClientRect().left;
+
+      // const xPos = clientX - buttonLeft;
+      // const yPos = clientY - buttonTop;
+
       const x = e.nativeEvent.offsetX;
       const y = e.nativeEvent.offsetY;
 
       ctx.beginPath();
       ctx.moveTo(x, y);
+      // ctx.moveTo(xPos, yPos);
       e.preventDefault();
     }
   };
@@ -92,6 +109,7 @@ export default function DrawingApp() {
   };
   const stopDraw = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     const ctx = ctxRef.current?.getContext('2d');
+    const canvas = ctxRef.current;
 
     if (isDrawing && ctx) {
       ctx.stroke();
@@ -99,12 +117,41 @@ export default function DrawingApp() {
       setIsDrawing(false);
     }
     e.preventDefault();
+    if (canvas && e.type !== 'mouseOut') {
+      const imgLastToStore = ctx?.getImageData(0, 0, canvas.width, canvas.height);
+      if (imgLastToStore) {
+        setStoreDrawing([...storeDrawing, imgLastToStore]);
+      }
+    }
   };
 
-  const handleClearCanvas = () => {
+  const handleClear = () => {
     const ctx = ctxRef.current?.getContext('2d');
     if (ctx) {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      setStoreDrawing([]);
+    }
+  };
+
+  const handleRedo = () => {
+    const ctx = ctxRef.current?.getContext('2d');
+    if (ctx) {
+      const imgLastToStore = ctx?.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+      if (imgLastToStore) {
+        setStoreDrawing([...storeDrawing.slice(0, -1)]);
+      }
+    }
+  };
+
+  const handleUndo = () => {
+    const ctx = ctxRef.current?.getContext('2d');
+    const canvas = ctxRef.current;
+    if (ctx && canvas) {
+      const imgLastToStore = storeDrawing[storeDrawing.length - 1];
+      if (imgLastToStore) {
+        ctx.putImageData(imgLastToStore, 0, 0);
+        setStoreDrawing(storeDrawing.slice(0, storeDrawing.length - 1));
+      }
     }
   };
 
@@ -117,17 +164,25 @@ export default function DrawingApp() {
         onMouseDown={startDraw}
         onMouseMove={drawing}
         onMouseUp={stopDraw}
-      ></Canvas>
+      />
       <Toolbox>
         <Button onClick={handleChangeWithLine('decrease')} disabled={widthLine === 5}>
-          -
+          <TiMinus />
         </Button>
         <div>{widthLine}</div>
         <Button onClick={handleChangeWithLine('increase')} disabled={widthLine === 30}>
-          +
+          <TiPlus />
         </Button>
         <input type="color" value={colorLine} onChange={handleColorLineChange} />
-        <Button onClick={handleClearCanvas}>X</Button>
+        <Button onClick={handleClear}>
+          <TiTimes />
+        </Button>
+        <Button onClick={handleRedo}>
+          <TiArrowForwardOutline />
+        </Button>
+        <Button onClick={handleUndo} disabled={widthLine === 5}>
+          <TiArrowBackOutline />
+        </Button>
       </Toolbox>
     </Wrapper>
   );

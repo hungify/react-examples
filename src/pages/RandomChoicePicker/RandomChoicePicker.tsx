@@ -22,8 +22,11 @@ const TextArea = styled.textarea`
   display: block;
   width: 100%;
   padding: 10px;
-  margin: 0 0 16px;
   font-size: 16px;
+  resize: none;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-weight: 500;
   &:focus {
     outline: none;
   }

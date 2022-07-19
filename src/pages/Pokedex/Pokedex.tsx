@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { capitalize } from 'utils';
 
 const Wrapper = styled.div`
   background: #efefbb;
@@ -19,27 +20,69 @@ const Inner = styled.div`
   max-width: 1200px;
 `;
 
+const colors = {
+  fire: '#FDDFDF',
+  grass: '#DEFDE0',
+  electric: '#FCF7DE',
+  water: '#DEF3FD',
+  ground: '#f4e7da',
+  rock: '#d5d5d4',
+  fairy: '#fceaff',
+  poison: '#98d7a5',
+  bug: '#f8d5a3',
+  dragon: '#97b3e6',
+  psychic: '#eaeda1',
+  flying: '#F5F5F5',
+  fighting: '#E6E0D4',
+  normal: '#F5F5F5',
+};
+
+type Type = keyof typeof colors;
+
+interface Pokemon {
+  name: string;
+  type: Type;
+}
+
 export default function Pokedex() {
-  const [pokemons, setPokemons] = useState([]);
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const [size, setSize] = useState(1);
 
   useEffect(() => {
-    const fetchPokemon = async () => {
-      const id = 1;
+    const fetchPokemon = async (id: number) => {
       const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
       const res = await fetch(url);
       const data = await res.json();
-      setPokemons(data);
+      setPokemons([
+        ...pokemons,
+        {
+          name: data.name,
+          type: data.types[0].type.name,
+        },
+      ]);
     };
-    fetchPokemon();
-  }, []);
+    let timer: NodeJS.Timer | null = null;
+    if (size < 150) {
+      timer = setInterval(() => {
+        fetchPokemon(size);
+        setSize(size + 1);
+      }, 500);
+    }
+
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [pokemons, size]);
 
   return (
     <Wrapper>
       <h1>Pokedex</h1>
       <Inner>
-        {/* {Array.from({ length: 151 }).map((_, i) => (
-          <Card cardinalNumber={i} img={} name={name} />
-        ))} */}
+        {pokemons.map(({ name, type }, i) => (
+          <Card cardinalNumber={i} name={name} type={type} key={name} />
+        ))}
       </Inner>
     </Wrapper>
   );
@@ -52,6 +95,7 @@ const CardContainer = styled.div`
   margin: 10px;
   padding: 20px;
   text-align: center;
+  color: #000;
 `;
 
 const Image = styled.div`
@@ -68,22 +112,37 @@ const Image = styled.div`
 `;
 const Info = styled.div`
   margin-top: 20px;
+  span {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.8em;
+  }
+  h2 {
+    margin: 15px 0 7px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
 `;
 
 interface CardProps {
   cardinalNumber: number;
   name: string;
-  img: string;
-  type: string;
+  img?: string;
+  type: Type;
 }
 
 function Card({ cardinalNumber, name, img, type }: CardProps) {
   return (
-    <CardContainer>
+    <CardContainer
+      style={{
+        backgroundColor: colors[type],
+      }}
+    >
       <Image />
       <Info>
         <span>{cardinalNumber}</span>
-        <h3>{name}</h3>
+        <h2>{capitalize(name)}</h2>
         <small>Type: {type}</small>
       </Info>
     </CardContainer>

@@ -5,7 +5,6 @@
   $search-height: 50px;
   &__wrapper {
     height: 100vh;
-    width: 100vw;
     background-image: linear-gradient(90deg, #7d5fff, #7158e2);
     display: flex;
     justify-content: center;
@@ -35,6 +34,7 @@
   &__btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     position: absolute;
     border-radius: 10px;
     border: none;

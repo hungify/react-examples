@@ -64,7 +64,7 @@
   color: #222;
 }
 
-button:focus {
+.action-buttons button:focus {
   outline: none;
 }
 

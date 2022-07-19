@@ -1,11 +1,13 @@
+import { useIntersectionObserver } from 'hooks';
 import KineticLoader from 'pages/KineticLoader';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
   margin: 0;
   background-color: #22254b;
-  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
 `;
 const Form = styled.form`
   padding: 1rem;
@@ -31,7 +33,7 @@ const MovieList = styled.div`
   gap: 10px;
 `;
 
-const CardMovie = styled.div`
+const ItemMovie = styled.div`
   width: 300px;
   margin: 16px;
   position: relative;
@@ -77,7 +79,7 @@ const Overview = styled.div`
   p {
     letter-spacing: 0.5px;
   }
-  ${CardMovie}:hover & {
+  ${ItemMovie}:hover & {
     transform: translateY(0);
   }
 `;
@@ -107,6 +109,13 @@ export default function MovieApp() {
   const [searchTerm, setSearchTerm] = useState('');
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.hash) {
+      window.scrollTo(0, 0);
+    }
+  }, [location]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -139,19 +148,14 @@ export default function MovieApp() {
       {movies.length > 0 ? (
         <MovieList>
           {movies.map((movie) => (
-            <CardMovie key={movie.id}>
-              <Image>
-                <img src={`${IMG_PATH}${movie.poster_path}`} alt={movie.title} />
-              </Image>
-              <Info>
-                <h3>{movie.title}</h3>
-                <span>{movie.vote_average}</span>
-              </Info>
-              <Overview>
-                <h3>Overview</h3>
-                <p>{movie.overview}</p>
-              </Overview>
-            </CardMovie>
+            <CardMovie
+              id={movie.id}
+              title={movie.title}
+              overview={movie.overview}
+              poster_path={movie.poster_path}
+              vote_average={movie.vote_average}
+              key={movie.id}
+            />
           ))}
         </MovieList>
       ) : loading ? (
@@ -162,5 +166,47 @@ export default function MovieApp() {
         </Empty>
       )}
     </Wrapper>
+  );
+}
+
+interface CardMovieProps {
+  id: number;
+  title: string;
+  vote_average: number;
+  overview: string;
+  poster_path: string;
+}
+
+function CardMovie({ id, title, vote_average, overview, poster_path }: CardMovieProps) {
+  const cardMovieRef = useRef<HTMLDivElement | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const entry = useIntersectionObserver(imgRef, {});
+  const isVisible = !!entry?.isIntersecting;
+
+  useEffect(() => {
+    if (entry?.intersectionRatio === 1) {
+      cardMovieRef.current?.classList.remove('bg-gray-200');
+    } else {
+      cardMovieRef.current?.classList.add('bg-gray-200');
+    }
+
+    if (isVisible) {
+      imgRef?.current?.setAttribute('src', `${IMG_PATH}${poster_path}`);
+    }
+  }, [entry?.intersectionRatio, isVisible, imgRef, poster_path]);
+  return (
+    <ItemMovie key={id} ref={cardMovieRef}>
+      <Image>
+        <img ref={imgRef} alt={title} />
+      </Image>
+      <Info>
+        <h3>{title}</h3>
+        <span>{vote_average}</span>
+      </Info>
+      <Overview>
+        <h3>Overview</h3>
+        <p>{overview}</p>
+      </Overview>
+    </ItemMovie>
   );
 }
