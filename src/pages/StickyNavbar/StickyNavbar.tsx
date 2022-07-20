@@ -11,7 +11,7 @@ export default function StickyNavbar() {
     <>
       <nav
         className={cx('nav', {
-          active: offsetY > 150,
+          active: offsetY > 15,
         })}
       >
         <div

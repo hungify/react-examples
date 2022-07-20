@@ -54,7 +54,7 @@ export default function LiveUserFilter() {
       <div className="w-[300px] shadow-lg rounded-md">
         <div className="bg-[#3e57db] py-[30px] px-[20px] text-white">
           <h4 className="font-medium">Live User Filter</h4>
-          <p className="opacity-80">Search by name or location</p>
+          <p className="opacity-80 mt-3">Search by name or location</p>
           <input
             type="text"
             placeholder="Search"

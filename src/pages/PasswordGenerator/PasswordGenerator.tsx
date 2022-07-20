@@ -18,6 +18,10 @@ const Box = styled.div`
   width: 350px;
   max-width: 100%;
   color: #fff;
+  h1 {
+    margin: 10px 0 20px;
+    text-align: center;
+  }
 `;
 const Result = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
@@ -64,63 +68,100 @@ const Setting = styled.li`
   }
 `;
 
+const OPTIONS = {
+  lowercase: 'abcdefghijklmnopqrstuvwxyz',
+  uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  numbers: '1234567890',
+  specialCharacters: '!@#$%^&*()',
+};
+
+type OptionKey = keyof typeof OPTIONS;
+type Option = Record<OptionKey, boolean>;
+
 export default function PasswordGenerator() {
-  const [passwordLength, setPasswordLength] = useState(20);
-  const [includeUppercase, setIncludeUppercase] = useState(true);
-  const [includeLowercase, setIncludeLowercase] = useState(false);
-  const [includeNumbers, setIncludeNumbers] = useState(false);
-  const [includeSymbols, setIncludeSymbols] = useState(false);
-  const [result, setResult] = useState('wN6(yG7*nW3=oO9(dO4^');
+  const [passwordLength, setPasswordLength] = useState(4);
+  const [options, setOptions] = useState<Option>({
+    lowercase: true,
+    uppercase: true,
+    numbers: true,
+    specialCharacters: true,
+  });
+
+  const [result, setResult] = useState('ABCD');
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordLength(Number(e.target.value));
   };
 
-  const handleIncludeChange = (type: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleIncludeChange = (type: OptionKey) => (e: React.ChangeEvent<HTMLInputElement>) => {
     if (type === 'uppercase') {
-      setIncludeUppercase(e.target.checked);
+      setOptions({
+        ...options,
+        uppercase: e.target.checked,
+      });
     } else if (type === 'lowercase') {
-      setIncludeLowercase(e.target.checked);
+      setOptions({
+        ...options,
+        lowercase: e.target.checked,
+      });
     } else if (type === 'numbers') {
-      setIncludeNumbers(e.target.checked);
-    } else if (type === 'symbols') {
-      setIncludeSymbols(e.target.checked);
+      setOptions({
+        ...options,
+        numbers: e.target.checked,
+      });
+    } else if (type === 'specialCharacters') {
+      setOptions({
+        ...options,
+        specialCharacters: e.target.checked,
+      });
     }
   };
 
   const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
     navigator.clipboard.writeText(result);
     window.alert('Copied to clipboard');
   };
 
+  const randomChar = (str: string) => str[Math.floor(Math.random() * str.length)];
+
+  const shuffleArray = (arr: string[]) => arr.sort(() => Math.random() - 0.5);
+
+  const generatePassword = (length: number, options: Option) => {
+    const optionsKeysLength = Object.keys(options).filter(
+      (key) => options[key as OptionKey]
+    ).length;
+
+    const password = [];
+    let characters = '';
+
+    // random password has option true for each options
+    for (const property in options) {
+      if (options[property as OptionKey]) {
+        characters += OPTIONS[property as OptionKey];
+        password.push(randomChar(OPTIONS[property as OptionKey]));
+      }
+    }
+
+    // random password to have length of passwordLength
+    if (password.length < passwordLength) {
+      for (let i = optionsKeysLength; i < length; i++) {
+        password.push(randomChar(characters));
+      }
+    }
+
+    return shuffleArray(password).join('');
+  };
+
   const handleShuffle = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    let words = '';
-    if (includeUppercase) {
-      words += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    }
-    if (includeLowercase) {
-      words += 'abcdefghijklmnopqrstuvwxyz';
-    }
-    if (includeNumbers) {
-      words += '0123456789';
-    }
-    if (includeSymbols) {
-      words += '!@#$%^&*(){}[]=<>/,.';
-    }
-    let result = '';
-    for (let i = 0; i < passwordLength; i++) {
-      result += words[Math.floor(Math.random() * words.length)];
-    }
+    const result = generatePassword(passwordLength, options);
     setResult(result);
   };
 
   return (
     <Wrapper>
       <Box>
-        <h3>Password generator</h3>
+        <h1>Password generator</h1>
         <Result>
           <span>{result}</span>
           <Button onClick={handleCopy}>
@@ -131,6 +172,7 @@ export default function PasswordGenerator() {
           <Setting>
             <label>Password Length</label>
             <input
+              className="text-center"
               type="text"
               min={6}
               max={40}
@@ -142,7 +184,7 @@ export default function PasswordGenerator() {
             <label>Include uppercase letters</label>
             <input
               type="checkbox"
-              checked={includeUppercase}
+              checked={options.uppercase}
               onChange={handleIncludeChange('uppercase')}
             />
           </Setting>
@@ -150,7 +192,7 @@ export default function PasswordGenerator() {
             <label>Include lowercase letters</label>
             <input
               type="checkbox"
-              checked={includeLowercase}
+              checked={options.lowercase}
               onChange={handleIncludeChange('lowercase')}
             />
           </Setting>
@@ -158,7 +200,7 @@ export default function PasswordGenerator() {
             <label>Include numbers</label>
             <input
               type="checkbox"
-              checked={includeNumbers}
+              checked={options.numbers}
               onChange={handleIncludeChange('numbers')}
             />
           </Setting>
@@ -166,8 +208,8 @@ export default function PasswordGenerator() {
             <label>Include symbols</label>
             <input
               type="checkbox"
-              checked={includeSymbols}
-              onChange={handleIncludeChange('symbols')}
+              checked={options.specialCharacters}
+              onChange={handleIncludeChange('specialCharacters')}
             />
           </Setting>
         </Settings>
@@ -176,7 +218,14 @@ export default function PasswordGenerator() {
           style={{
             width: '100%',
           }}
-          disabled={!(includeUppercase || includeLowercase || includeNumbers || includeSymbols)}
+          disabled={
+            !(
+              options.lowercase ||
+              options.uppercase ||
+              options.numbers ||
+              options.specialCharacters
+            ) || passwordLength < 4
+          }
         >
           Generate Password
         </Button>

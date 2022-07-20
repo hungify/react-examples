@@ -1,5 +1,5 @@
 import { usePrevious } from 'hooks';
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, Fragment, useLayoutEffect, useRef, useState } from 'react';
 
 export default function VerifyAccountUI() {
   const [numInputs, setNumInputs] = useState(6);
@@ -57,8 +57,8 @@ export default function VerifyAccountUI() {
           your email address.
         </p>
         <OTPInput
-          isInputNumber={true}
-          isInputSecure={false}
+          isInputNumber={isInputNumber}
+          isInputSecure={isInputSecure}
           numInputs={numInputs}
           separator={separator}
           onChangeOTP={(otp) => {}}
@@ -248,27 +248,24 @@ function OTPInput({
 
   return (
     <div {...rest} className="flex flex-wrap items-center justify-center w-full">
-      {Array(numInputs)
-        .fill('')
-        .map((_, index) => (
-          <>
-            <InputCode
-              key={index}
-              type={isInputSecure ? 'password' : isInputNumber ? 'number' : 'text'}
-              focus={activeIdxInput === index}
-              value={otpValues && otpValues[index]}
-              autoFocus={autoFocus}
-              onFocus={handleOnFocus(index)}
-              onChange={handleOnChange}
-              onKeyDown={handleOnKeyDown}
-              onBlur={onBlur}
-              onPaste={handleOnPaste}
-              className={inputClassName}
-              disabled={disabled}
-            />
-            {separator && index < numInputs - 1 && <span>{separator}</span>}
-          </>
-        ))}
+      {Array.from({ length: numInputs }).map((_, index) => (
+        <Fragment key={index}>
+          <InputCode
+            type={isInputSecure ? 'password' : isInputNumber ? 'number' : 'text'}
+            focus={activeIdxInput === index}
+            value={otpValues && otpValues[index]}
+            autoFocus={autoFocus}
+            onFocus={handleOnFocus(index)}
+            onChange={handleOnChange}
+            onKeyDown={handleOnKeyDown}
+            onBlur={onBlur}
+            onPaste={handleOnPaste}
+            className={inputClassName}
+            disabled={disabled}
+          />
+          {separator && index < numInputs - 1 && <span>{separator}</span>}
+        </Fragment>
+      ))}
     </div>
   );
 }
@@ -297,6 +294,7 @@ function InputCode({ focus, autoFocus = true, ...rest }: InputCodeProps) {
   return (
     <input
       ref={inputRef}
+      autoFocus={autoFocus}
       {...rest}
       className="w-[100px] h-[120px] m-2 text-center border-2 border-blue-300 rounded-md appearance-none text-7xl"
     />

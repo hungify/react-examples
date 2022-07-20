@@ -1,5 +1,4 @@
-import useDebounce from 'hooks/useDebounce';
-import { useEffect, useState } from 'react';
+import { useDeferredValue, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -60,6 +59,7 @@ const UL = styled.ul`
 const LI = styled.li`
   display: flex;
   align-items: center;
+  margin: 10px 0;
   strong {
     font-size: 0.9rem;
     margin-left: 0.5rem;
@@ -70,12 +70,15 @@ const Info = styled.div`
   margin-left: 20px;
 `;
 const Repositories = styled.div``;
-const CardLInk = styled.a`
+
+const TagLink = styled.a`
   text-decoration: none;
   color: #fff;
   background-color: #212a72;
   font-size: 0.7rem;
   padding: 0.25rem 0.5rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
   display: inline-block;
   &:not(:last-child) {
     margin-right: 0.5rem;
@@ -102,7 +105,7 @@ export default function GithubProfiles() {
   const [profile, setProfile] = useState<Profile>();
   const [repositories, setRepositories] = useState<Repository[]>([]);
 
-  const searchValue = useDebounce(searchText, 500);
+  const searchValue = useDeferredValue(searchText);
 
   useEffect(() => {
     const getGithubProfile = async (searchText: string) => {
@@ -145,7 +148,7 @@ export default function GithubProfiles() {
             <img src={profile.avatar_url} alt="avatar" />
           </Avatar>
           <Info>
-            <h2>{profile.name}</h2>
+            <h1>{profile.name}</h1>
             <p>{profile.bio}</p>
             <UL>
               <LI>
@@ -163,9 +166,9 @@ export default function GithubProfiles() {
             </UL>
             <Repositories>
               {repositories.map((repo) => (
-                <CardLInk href={repo.html_url} target="_blank">
+                <TagLink href={repo.html_url} target="_blank">
                   {repo.name}
-                </CardLInk>
+                </TagLink>
               ))}
             </Repositories>
           </Info>
