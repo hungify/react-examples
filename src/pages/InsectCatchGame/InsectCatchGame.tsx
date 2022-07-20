@@ -1,4 +1,4 @@
-import { insect } from 'mocks';
+import { insectList } from 'mocks';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -14,9 +14,15 @@ const Wrapper = styled.div`
 `;
 
 interface ScreenStyled {
-  screen: number;
+  isUp: boolean;
 }
-const Screen = styled.div<ScreenStyled>`
+
+const ScreenUp = styled.div<ScreenStyled>`
+  margin-top: ${({ isUp }) => (isUp ? '-100vh' : '0')};
+  position: ${({ isUp }) => (isUp ? 'relative' : 'static')}; ;
+`;
+
+const Screen = styled(ScreenUp)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,39 +95,73 @@ const WrapInsect = styled.div`
   width: 100px;
   height: 100px;
   position: absolute;
-  transform: translate(-50%, -50%) scale(1);
   transition: transform 0.3s ease-in-out;
+`;
+const Message = styled.h5`
+  line-height: 1.7;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  font-family: inherit;
+  padding: 20px;
+  z-index: 100;
+  text-align: center;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -150%);
+  transition: transform 0.4s ease-in;
+  &.show {
+    transform: translate(-50%, 150%);
+    opacity: 1;
+  }
 `;
 
 interface Insect {
   name: string;
   img: string;
 }
+
 export default function InsectCatchGame() {
   const [screen, setScreen] = useState(0);
-  const [insect, setInsect] = useState<Insect | undefined>(undefined);
   const [score, setScore] = useState(0);
+  const [insects, setInsects] = useState<Insect[]>([]);
 
   const handleNextClick = (screen: number) => {
     setScreen(screen);
   };
 
   const handleChoiceClick = (insect: Insect) => {
-    setInsect(insect);
-    setScreen(screen + 1);
+    const insectItem = insectList.find((item) => item.name === insect.name);
+    if (insectItem) {
+      setInsects([{ ...insectItem }]);
+      setScreen(screen + 1);
+    }
   };
 
   const handleCatchInsect = () => {
     setScore(score + 1);
+    const firstInsect =
+      insectList.find((insect) => insect.name === insects[0].name) || insectList[0];
+    setInsects([...insects, firstInsect]);
+  };
+
+  const handlePlayAgain = () => {
+    setScreen(0);
+    setScore(0);
+    setInsects([]);
   };
 
   return (
     <Wrapper>
-      {screen === 0 && <IntroductionScreen onNext={handleNextClick} screen={screen} />}
-      {screen === 1 && <ChoiceScreen screen={screen} onChoice={handleChoiceClick} />}
-      {screen === 2 && (
-        <GameScreen score={score} screen={screen} insect={insect} onCatch={handleCatchInsect} />
-      )}
+      <IntroductionScreen onNext={handleNextClick} screen={screen} />
+      <ChoiceScreen screen={screen} onChoice={handleChoiceClick} />
+      <GameScreen
+        score={score}
+        insects={insects}
+        onCatch={handleCatchInsect}
+        onPlayAgain={handlePlayAgain}
+      />
     </Wrapper>
   );
 }
@@ -132,7 +172,7 @@ interface IntroductionScreenProps {
 }
 function IntroductionScreen({ onNext, screen }: IntroductionScreenProps) {
   return (
-    <Screen screen={screen}>
+    <Screen isUp={screen >= 1}>
       <h1>Catch The Insect</h1>
       <Button onClick={() => onNext(screen + 1)}>Play Game</Button>
     </Screen>
@@ -145,10 +185,10 @@ interface ChoiceScreenProps {
 }
 function ChoiceScreen({ screen, onChoice }: ChoiceScreenProps) {
   return (
-    <Screen screen={screen}>
+    <Screen isUp={screen >= 2}>
       <h1>What is your "favorite" insect?</h1>
       <List>
-        {insect.map(({ name, img }) => (
+        {insectList.map(({ name, img }) => (
           <Item key={name}>
             <button onClick={() => onChoice({ name, img })}>
               <p>{name}</p>
@@ -163,15 +203,34 @@ function ChoiceScreen({ screen, onChoice }: ChoiceScreenProps) {
 
 interface GameScreenProps {
   score: number;
-  screen: number;
-  insect?: Insect;
+  insects: Insect[];
   onCatch: () => void;
+  onPlayAgain: () => void;
 }
-function GameScreen({ score, screen, insect, onCatch }: GameScreenProps) {
+function GameScreen({ score, insects, onCatch, onPlayAgain }: GameScreenProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [second, setSecond] = useState<number>(0);
-  const timeRef = useRef<string>('00:00');
-  const [catchInsect, setCatchInsect] = useState(false);
+  const timeRef = useRef('00:00');
+  const [catchInsectIdx, setCatchInsectIdx] = useState(-1);
+  const [second, setSecond] = useState(0);
+
+  const getRandomLocation = () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const x = Math.random() * (width - 200) + 100;
+    const y = Math.random() * (height - 200) + 100;
+    return { x, y };
+  };
+
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+
+    if (wrapper) {
+      const { x, y } = getRandomLocation();
+      wrapper.style.left = `${x}px`;
+      wrapper.style.top = `${y}px`;
+      wrapper.style.transform = `rotate(${Math.random() * 360}deg)`;
+    }
+  }, [insects]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -183,65 +242,66 @@ function GameScreen({ score, screen, insect, onCatch }: GameScreenProps) {
       timeRef.current = `${newMinutes}:${newSeconds}`;
       setSecond(second + 1);
     }, 1000);
+
+    if (score >= 20) {
+      clearInterval(interval);
+      return;
+    }
+
     return () => clearInterval(interval);
-  }, [second]);
+  }, [second, score]);
 
   useEffect(() => {
-    const randomInsect = () => {
-      const { x, y } = getRandomLocation();
-      const insectContainer = wrapperRef.current;
-      if (insectContainer) {
-        insectContainer.style.left = `${x}px`;
-        insectContainer.style.top = `${y}px`;
-      }
-    };
-
     const timer = setTimeout(() => {
-      if (catchInsect) {
-        randomInsect();
-        setCatchInsect(false);
+      if (catchInsectIdx >= 0) {
+        setCatchInsectIdx(-1);
       }
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [catchInsect]);
+  }, [catchInsectIdx]);
 
-  const getRandomLocation = () => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const x = Math.random() * (width - 200) + 100;
-    const y = Math.random() * (height - 200) + 100;
-    return { x, y };
-  };
-
-  const onCatchInsect = () => {
+  const onCatchInsect = (idx: number) => {
     onCatch();
-    setCatchInsect(true);
+    setCatchInsectIdx(idx);
   };
 
   return (
-    <GameContainer screen={screen}>
+    <GameContainer isUp={false}>
       <Time>{timeRef.current}</Time>
       <Score>{score}</Score>
-      {insect && (
+      {insects?.map((insect, idx) => (
         <WrapInsect
+          key={`${insect.name}-${idx}`}
           ref={wrapperRef}
-          onClick={onCatchInsect}
+          onClick={() => onCatchInsect(idx)}
           style={{
-            transform: catchInsect
-              ? 'translate(-50%, -50%) scale(0)'
-              : 'translate(-50%, -50%) scale(1)',
+            transform:
+              catchInsectIdx === idx
+                ? 'translate(-50%, -50%) scale(0)'
+                : 'translate(-50%, -50%) scale(1)',
           }}
         >
-          <Image
-            src={insect.img}
-            alt={insect.name}
-            style={{
-              transform: `rotate(${Math.random() * 360}deg)`,
-            }}
-          />
+          <Image src={insect.img} alt={insect.name} />
         </WrapInsect>
-      )}
+      ))}
+      <FinishGameMessage score={score} onPlayAgain={onPlayAgain} />
     </GameContainer>
+  );
+}
+
+interface FinishGameMessageProps {
+  score: number;
+  onPlayAgain: () => void;
+}
+
+function FinishGameMessage({ score, onPlayAgain }: FinishGameMessageProps) {
+  return (
+    <Message className={`${score >= 20 ? 'show' : ''}`}>
+      Are you annnoyed yet? <br />
+      You are playing an impossible game!!
+      <br />
+      <Button onClick={onPlayAgain}>Play again</Button>
+    </Message>
   );
 }

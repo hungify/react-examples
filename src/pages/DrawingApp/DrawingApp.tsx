@@ -5,6 +5,7 @@ import {
   TiMinus,
   TiPlus,
   TiTimes,
+  TiArrowDownOutline,
 } from 'react-icons/ti';
 import styled from 'styled-components';
 
@@ -33,22 +34,35 @@ const Toolbox = styled.div`
     width: 50px;
     margin: 0.25rem;
     padding: 0.25rem;
-    cursor: pointer;
   }
 `;
 
 const Button = styled.button`
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
+
+interface Point {
+  offsetX: number;
+  offsetY: number;
+}
+type UndoStep = Record<number, Point[]>;
+type RedoStep = Record<number, Point[]>;
 
 export default function DrawingApp() {
   const [widthLine, setWidthLine] = useState(5);
-  const [colorLine, setColorLine] = useState('#000');
+  const [colorLine, setColorLine] = useState('#000000');
   const [isDrawing, setIsDrawing] = useState(false);
   const [storeDrawing, setStoreDrawing] = useState<ImageData[]>([]);
   const ctxRef = useRef<HTMLCanvasElement>(null);
 
-  const handleChangeWithLine = (type: string) => () => {
+  const [undoSteps, setUndoSteps] = useState<UndoStep>({});
+  const [redoStep, setRedoStep] = useState<RedoStep>({});
+
+  const [undo, setUndo] = useState(0);
+  const [redo, setRedo] = useState(0);
+
+  const handleWidthLineChange = (type: 'increase' | 'decrease') => () => {
     if (type === 'increase') {
       setWidthLine(widthLine + 5);
     } else if (type === 'decrease') {
@@ -67,35 +81,36 @@ export default function DrawingApp() {
 
   const startDraw = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     setIsDrawing(true);
-    const canvas = ctxRef.current;
+    const { offsetX, offsetY } = e.nativeEvent;
+
     const ctx = ctxRef.current?.getContext('2d');
-    if (ctx && canvas) {
-      // const clientX = e.clientX;
-      // const clientY = e.clientY;
-
-      // const buttonTop = e.currentTarget.getBoundingClientRect().top;
-      // const buttonLeft = e.currentTarget.getBoundingClientRect().left;
-
-      // const xPos = clientX - buttonLeft;
-      // const yPos = clientY - buttonTop;
-
-      const x = e.nativeEvent.offsetX;
-      const y = e.nativeEvent.offsetY;
-
+    if (ctx) {
       ctx.beginPath();
-      ctx.moveTo(x, y);
-      // ctx.moveTo(xPos, yPos);
-      e.preventDefault();
+      ctx.moveTo(offsetX, offsetY);
     }
+    const temp: UndoStep = {
+      ...undoSteps,
+      [undo + 1]: [],
+    };
+
+    temp[undo + 1].push({ offsetX, offsetY });
+    setUndoSteps(temp);
+    setUndo(undo + 1);
   };
   const drawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     const canvas = ctxRef.current;
     const ctx = ctxRef.current?.getContext('2d');
 
     if (isDrawing && ctx && canvas) {
-      const x = e.nativeEvent.offsetX;
-      const y = e.nativeEvent.offsetY;
-      ctx.lineTo(x, y);
+      const { offsetX, offsetY } = e.nativeEvent;
+
+      const temp: UndoStep = {
+        ...undoSteps,
+      };
+      temp[undo].push({ offsetX, offsetY });
+      setUndoSteps(temp);
+
+      ctx.lineTo(offsetX, offsetY);
 
       ctx.lineWidth = widthLine;
       ctx.strokeStyle = colorLine;
@@ -104,8 +119,6 @@ export default function DrawingApp() {
 
       ctx.stroke();
     }
-
-    e.preventDefault();
   };
   const stopDraw = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     const ctx = ctxRef.current?.getContext('2d');
@@ -135,23 +148,74 @@ export default function DrawingApp() {
 
   const handleRedo = () => {
     const ctx = ctxRef.current?.getContext('2d');
-    if (ctx) {
-      const imgLastToStore = ctx?.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
-      if (imgLastToStore) {
-        setStoreDrawing([...storeDrawing.slice(0, -1)]);
-      }
+    if (redo > 0 && ctx) {
+      const data: Point[] = redoStep[redo];
+      ctx.strokeStyle = colorLine;
+      ctx.beginPath();
+      ctx.lineWidth = 5;
+      ctx.moveTo(data[0].offsetX, data[0].offsetY);
+      data.forEach((item, index) => {
+        if (index !== 0) {
+          ctx.lineTo(item.offsetX, item.offsetY);
+          ctx.stroke();
+        }
+      });
+      ctx.closePath();
+      const temp: RedoStep = {
+        ...redoStep,
+        [redo]: [],
+      };
+      setUndo(undo + 1);
+      setRedo(redo - 1);
+      setRedoStep(temp);
+      setUndoSteps({
+        ...undoSteps,
+        [undo + 1]: [...data],
+      });
     }
   };
 
   const handleUndo = () => {
     const ctx = ctxRef.current?.getContext('2d');
+    if (undo > 0 && ctx) {
+      const data: Point[] = undoSteps[undo];
+      ctx.strokeStyle = colorLine;
+      ctx.beginPath();
+      ctx.lineWidth = 5;
+      ctx.moveTo(data[0].offsetX, data[0].offsetY);
+      data.forEach((item, index) => {
+        if (index !== 0) {
+          ctx.lineTo(item.offsetX, item.offsetY);
+          ctx.stroke();
+        }
+      });
+      ctx.closePath();
+      ctx.strokeStyle = 'black';
+      const temp: UndoStep = {
+        ...undoSteps,
+        [undo]: [],
+      };
+      const te = {
+        ...redoStep,
+        [redo + 1]: [...data],
+      };
+      setUndo(undo - 1);
+      setRedo(redo + 1);
+      setRedoStep(te);
+      setUndoSteps(temp);
+    }
+  };
+
+  const handleSave = () => {
     const canvas = ctxRef.current;
-    if (ctx && canvas) {
-      const imgLastToStore = storeDrawing[storeDrawing.length - 1];
-      if (imgLastToStore) {
-        ctx.putImageData(imgLastToStore, 0, 0);
-        setStoreDrawing(storeDrawing.slice(0, storeDrawing.length - 1));
-      }
+    const ctx = ctxRef.current?.getContext('2d');
+    if (canvas && ctx) {
+      ctx.fillStyle = '#fff';
+      const url = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = 'art.png';
+      link.href = url;
+      link.click();
     }
   };
 
@@ -165,25 +229,71 @@ export default function DrawingApp() {
         onMouseMove={drawing}
         onMouseUp={stopDraw}
       />
-      <Toolbox>
-        <Button onClick={handleChangeWithLine('decrease')} disabled={widthLine === 5}>
-          <TiMinus />
-        </Button>
-        <div>{widthLine}</div>
-        <Button onClick={handleChangeWithLine('increase')} disabled={widthLine === 30}>
-          <TiPlus />
-        </Button>
-        <input type="color" value={colorLine} onChange={handleColorLineChange} />
-        <Button onClick={handleClear}>
-          <TiTimes />
-        </Button>
-        <Button onClick={handleRedo}>
-          <TiArrowForwardOutline />
-        </Button>
-        <Button onClick={handleUndo} disabled={widthLine === 5}>
-          <TiArrowBackOutline />
-        </Button>
-      </Toolbox>
+      <Menu
+        colorLine={colorLine}
+        widthLine={widthLine}
+        onChangeColorLine={handleColorLineChange}
+        onChangeWidthLine={handleWidthLineChange}
+        onClear={handleClear}
+        onUndo={handleUndo}
+        onRedo={handleRedo}
+        onSave={handleSave}
+        undo={undo}
+        redo={redo}
+      />
     </Wrapper>
+  );
+}
+
+interface MenuProps {
+  widthLine: number;
+  colorLine: string;
+  undo: number;
+  redo: number;
+  onChangeWidthLine: (type: 'increase' | 'decrease') => () => void;
+  onChangeColorLine: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClear: () => void;
+  onRedo: () => void;
+  onUndo: () => void;
+  onSave: () => void;
+}
+
+function Menu({
+  widthLine,
+  colorLine,
+  undo,
+  redo,
+  onChangeWidthLine,
+  onChangeColorLine,
+  onClear,
+  onUndo,
+  onRedo,
+  onSave,
+}: MenuProps) {
+  return (
+    <Toolbox>
+      <Button onClick={onChangeWidthLine('decrease')} disabled={widthLine === 5}>
+        <TiMinus />
+      </Button>
+      <div>{widthLine}</div>
+      <Button onClick={onChangeWidthLine('increase')} disabled={widthLine === 30}>
+        <TiPlus />
+      </Button>
+      <input type="color" value={colorLine} onChange={onChangeColorLine} />
+      <Button onClick={onClear}>
+        <TiTimes />
+      </Button>
+
+      {/* <Button onClick={onUndo} disabled={undo === 0}>
+        <TiArrowForwardOutline />
+      </Button>
+      <Button onClick={onRedo} disabled={redo === 0}>
+        <TiArrowBackOutline />
+      </Button> */}
+
+      <Button onClick={onSave}>
+        <TiArrowDownOutline />
+      </Button>
+    </Toolbox>
   );
 }

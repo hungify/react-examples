@@ -6,4 +6,4 @@ export { steps } from './steps';
 export { navMobile } from './navMobile';
 export { quiz } from './quiz';
 export { feedback } from './feedback';
-export { insect } from './insect';
+export { insectList } from './insect';

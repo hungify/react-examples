@@ -1,4 +1,4 @@
-export const insect = [
+export const insectList = [
   {
     name: 'Fly',
     img: 'http://pngimg.com/uploads/fly/fly_PNG3946.png',
