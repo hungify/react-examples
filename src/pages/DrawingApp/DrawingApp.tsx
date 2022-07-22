@@ -38,29 +38,19 @@ const Toolbox = styled.div`
 `;
 
 const Button = styled.button`
+  display: block;
+  width: 100%;
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
 `;
-
-interface Point {
-  offsetX: number;
-  offsetY: number;
-}
-type UndoStep = Record<number, Point[]>;
-type RedoStep = Record<number, Point[]>;
 
 export default function DrawingApp() {
   const [widthLine, setWidthLine] = useState(5);
   const [colorLine, setColorLine] = useState('#000000');
   const [isDrawing, setIsDrawing] = useState(false);
-  const [storeDrawing, setStoreDrawing] = useState<ImageData[]>([]);
+  const [storeDrawing, setStoreDrawing] = useState<Uint8ClampedArray[]>([]);
+  const [storeIdx, setStoreIdx] = useState(-1);
   const ctxRef = useRef<HTMLCanvasElement>(null);
-
-  const [undoSteps, setUndoSteps] = useState<UndoStep>({});
-  const [redoStep, setRedoStep] = useState<RedoStep>({});
-
-  const [undo, setUndo] = useState(0);
-  const [redo, setRedo] = useState(0);
 
   const handleWidthLineChange = (type: 'increase' | 'decrease') => () => {
     if (type === 'increase') {
@@ -88,27 +78,12 @@ export default function DrawingApp() {
       ctx.beginPath();
       ctx.moveTo(offsetX, offsetY);
     }
-    const temp: UndoStep = {
-      ...undoSteps,
-      [undo + 1]: [],
-    };
-
-    temp[undo + 1].push({ offsetX, offsetY });
-    setUndoSteps(temp);
-    setUndo(undo + 1);
   };
   const drawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    const canvas = ctxRef.current;
     const ctx = ctxRef.current?.getContext('2d');
 
-    if (isDrawing && ctx && canvas) {
+    if (isDrawing && ctx) {
       const { offsetX, offsetY } = e.nativeEvent;
-
-      const temp: UndoStep = {
-        ...undoSteps,
-      };
-      temp[undo].push({ offsetX, offsetY });
-      setUndoSteps(temp);
 
       ctx.lineTo(offsetX, offsetY);
 
@@ -131,9 +106,10 @@ export default function DrawingApp() {
     }
     e.preventDefault();
     if (canvas && e.type !== 'mouseOut') {
-      const imgLastToStore = ctx?.getImageData(0, 0, canvas.width, canvas.height);
+      const imgLastToStore = ctx?.getImageData(0, 0, canvas.width, canvas.height).data;
       if (imgLastToStore) {
         setStoreDrawing([...storeDrawing, imgLastToStore]);
+        setStoreIdx(storeIdx + 1);
       }
     }
   };
@@ -142,67 +118,31 @@ export default function DrawingApp() {
     const ctx = ctxRef.current?.getContext('2d');
     if (ctx) {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      setStoreIdx(-1);
       setStoreDrawing([]);
     }
   };
 
   const handleRedo = () => {
     const ctx = ctxRef.current?.getContext('2d');
-    if (redo > 0 && ctx) {
-      const data: Point[] = redoStep[redo];
-      ctx.strokeStyle = colorLine;
-      ctx.beginPath();
-      ctx.lineWidth = 5;
-      ctx.moveTo(data[0].offsetX, data[0].offsetY);
-      data.forEach((item, index) => {
-        if (index !== 0) {
-          ctx.lineTo(item.offsetX, item.offsetY);
-          ctx.stroke();
-        }
-      });
-      ctx.closePath();
-      const temp: RedoStep = {
-        ...redoStep,
-        [redo]: [],
-      };
-      setUndo(undo + 1);
-      setRedo(redo - 1);
-      setRedoStep(temp);
-      setUndoSteps({
-        ...undoSteps,
-        [undo + 1]: [...data],
-      });
-    }
   };
 
   const handleUndo = () => {
     const ctx = ctxRef.current?.getContext('2d');
-    if (undo > 0 && ctx) {
-      const data: Point[] = undoSteps[undo];
-      ctx.strokeStyle = colorLine;
-      ctx.beginPath();
-      ctx.lineWidth = 5;
-      ctx.moveTo(data[0].offsetX, data[0].offsetY);
-      data.forEach((item, index) => {
-        if (index !== 0) {
-          ctx.lineTo(item.offsetX, item.offsetY);
-          ctx.stroke();
-        }
-      });
-      ctx.closePath();
-      ctx.strokeStyle = 'black';
-      const temp: UndoStep = {
-        ...undoSteps,
-        [undo]: [],
-      };
-      const te = {
-        ...redoStep,
-        [redo + 1]: [...data],
-      };
-      setUndo(undo - 1);
-      setRedo(redo + 1);
-      setRedoStep(te);
-      setUndoSteps(temp);
+    if (ctx) {
+      if (storeIdx <= 0) {
+        handleClear();
+      } else {
+        setStoreIdx(storeIdx - 1);
+        storeDrawing.pop();
+        setStoreDrawing([...storeDrawing]);
+        const imageLast = new ImageData(
+          storeDrawing[storeIdx],
+          ctx.canvas.width,
+          ctx.canvas.height
+        );
+        ctx.putImageData(imageLast, 0, 0);
+      }
     }
   };
 
@@ -238,8 +178,7 @@ export default function DrawingApp() {
         onUndo={handleUndo}
         onRedo={handleRedo}
         onSave={handleSave}
-        undo={undo}
-        redo={redo}
+        storeIdx={storeIdx}
       />
     </Wrapper>
   );
@@ -248,8 +187,7 @@ export default function DrawingApp() {
 interface MenuProps {
   widthLine: number;
   colorLine: string;
-  undo: number;
-  redo: number;
+  storeIdx: number;
   onChangeWidthLine: (type: 'increase' | 'decrease') => () => void;
   onChangeColorLine: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
@@ -261,8 +199,7 @@ interface MenuProps {
 function Menu({
   widthLine,
   colorLine,
-  undo,
-  redo,
+  storeIdx,
   onChangeWidthLine,
   onChangeColorLine,
   onClear,
@@ -283,11 +220,13 @@ function Menu({
       <Button onClick={onClear}>
         <TiTimes />
       </Button>
-
-      {/* <Button onClick={onUndo} disabled={undo === 0}>
+      <h1>This is a Demo showing several ways to implement Conditional Rendering in React.</h1>
+      {/* <Button onClick={onUndo} disabled={storeIdx === 0}>
+        undo
         <TiArrowForwardOutline />
       </Button>
-      <Button onClick={onRedo} disabled={redo === 0}>
+      <Button onClick={onRedo} disabled={storeIdx === 0}>
+        repo
         <TiArrowBackOutline />
       </Button> */}
 

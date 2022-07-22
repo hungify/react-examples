@@ -50,6 +50,7 @@ import TestimonialBoxSwitcher from 'pages/TestimonialBoxSwitcher';
 import ThemeClock from 'pages/ThemeClock';
 import ToastNotification from 'pages/ToastNotification';
 import TodoApp from 'pages/TodoApp';
+import { TodoProvider } from 'pages/TodoApp/context';
 import VerifyAccountUI from 'pages/VerifyAccountUI';
 import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
@@ -120,7 +121,14 @@ function App() {
             <Route path="verify-account-ui" element={<VerifyAccountUI />} />
             <Route path="hoverboard" element={<Hoverboard />} />
             <Route path="quiz-app" element={<QuizApp />} />
-            <Route path="todo-list" element={<TodoApp />} />
+            <Route
+              path="todo-list"
+              element={
+                <TodoProvider>
+                  <TodoApp />
+                </TodoProvider>
+              }
+            />
             <Route path="feedback-ui-design" element={<FeedbackUIDesign />} />
             <Route path="netflix-mobile-navigation" element={<NetflixMobileNavigation />} />
             <Route path="password-strength-background" element={<PasswordStrengthBackground />} />
