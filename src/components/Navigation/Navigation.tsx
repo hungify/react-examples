@@ -2,7 +2,7 @@ import { projects } from 'mocks';
 import { useEffect, useState } from 'react';
 import { HiOutlineArrowSmLeft, HiOutlineArrowSmRight, HiOutlineHome } from 'react-icons/hi';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { capitalize } from 'utils';
+import { capitalize } from 'utils/string';
 
 interface NavigationProps {
   children?: React.ReactNode;
