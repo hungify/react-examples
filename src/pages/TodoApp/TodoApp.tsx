@@ -9,17 +9,19 @@ interface Todo {
 
 export default function TodoApp() {
   const [text, setText] = useState('');
-  const { addTodo, removeTodo, completeTodo } = useTodo();
+  const { addTodo, removeTodo, completeTodo, editTodo } = useTodo();
 
   const handleTodoSubmit = (evt: React.KeyboardEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const todo = {
-      id: new Date().getTime(),
-      text,
-      completed: false,
-    };
-    addTodo(todo);
-    setText('');
+    if (text) {
+      const todo = {
+        id: new Date().getTime(),
+        text,
+        completed: false,
+      };
+      addTodo(todo);
+      setText('');
+    }
   };
 
   const handleTodoClick = (id: number, mousePosition: 'left' | 'right') => {
@@ -30,8 +32,8 @@ export default function TodoApp() {
     }
   };
 
-  const handleTodoDoubleClick = (id: number) => {
-    console.log('Double click on todo with id: ' + id);
+  const handleTodoDoubleClick = (id: number, text: string) => {
+    editTodo(id, text);
   };
 
   return (
@@ -61,7 +63,7 @@ export default function TodoApp() {
 }
 
 interface TodoListProps {
-  onTodoDoubleClick: (id: number) => void;
+  onTodoDoubleClick: (id: number, text: string) => void;
   onTodoClick: (id: number, mousePosition: 'left' | 'right') => void;
 }
 
@@ -87,12 +89,11 @@ function TodoList({ onTodoClick, onTodoDoubleClick }: TodoListProps) {
 interface TodoItemProps {
   todo: Todo;
   onTodoClick: (id: number, mousePosition: 'left' | 'right') => void;
-  onTodoDoubleClick: (id: number) => void;
+  onTodoDoubleClick: (id: number, text: string) => void;
 }
 
 function TodoItem({ todo, onTodoClick, onTodoDoubleClick }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const { editTodo } = useTodo();
   const { id, text, completed } = todo;
   let timer: NodeJS.Timeout | null = null;
 
@@ -113,14 +114,16 @@ function TodoItem({ todo, onTodoClick, onTodoDoubleClick }: TodoItemProps) {
       clearTimeout(timer);
     }
     setIsEditing(true);
-    onTodoDoubleClick(id);
   };
 
   const handleTodoChange = (id: number) => (evt: React.KeyboardEvent<HTMLLIElement>) => {
     const value = evt.currentTarget.textContent;
-    if (evt.key === 'Enter' && value) {
-      editTodo(id, value);
-      setIsEditing(false);
+    const key = evt.key;
+    if (value) {
+      if (key === 'Enter') {
+        onTodoDoubleClick(id, value);
+        setIsEditing(false);
+      }
     }
   };
 
