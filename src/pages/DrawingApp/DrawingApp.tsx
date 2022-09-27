@@ -1,12 +1,5 @@
 import { useRef, useState } from 'react';
-import {
-  TiArrowBackOutline,
-  TiArrowForwardOutline,
-  TiMinus,
-  TiPlus,
-  TiTimes,
-  TiArrowDownOutline,
-} from 'react-icons/ti';
+import { TiArrowDownOutline, TiMinus, TiPlus, TiTimes } from 'react-icons/ti';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -106,7 +99,12 @@ export default function DrawingApp() {
     }
     e.preventDefault();
     if (canvas && e.type !== 'mouseOut') {
-      const imgLastToStore = ctx?.getImageData(0, 0, canvas.width, canvas.height).data;
+      const imgLastToStore = ctx?.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height,
+      ).data;
       if (imgLastToStore) {
         setStoreDrawing([...storeDrawing, imgLastToStore]);
         setStoreIdx(storeIdx + 1);
@@ -137,9 +135,9 @@ export default function DrawingApp() {
         storeDrawing.pop();
         setStoreDrawing([...storeDrawing]);
         const imageLast = new ImageData(
-          storeDrawing[storeIdx],
+          storeDrawing[storeIdx]!,
           ctx.canvas.width,
-          ctx.canvas.height
+          ctx.canvas.height,
         );
         ctx.putImageData(imageLast, 0, 0);
       }
@@ -209,18 +207,27 @@ function Menu({
 }: MenuProps) {
   return (
     <Toolbox>
-      <Button onClick={onChangeWidthLine('decrease')} disabled={widthLine === 5}>
+      <Button
+        onClick={onChangeWidthLine('decrease')}
+        disabled={widthLine === 5}
+      >
         <TiMinus />
       </Button>
       <div>{widthLine}</div>
-      <Button onClick={onChangeWidthLine('increase')} disabled={widthLine === 30}>
+      <Button
+        onClick={onChangeWidthLine('increase')}
+        disabled={widthLine === 30}
+      >
         <TiPlus />
       </Button>
-      <input type="color" value={colorLine} onChange={onChangeColorLine} />
+      <input type='color' value={colorLine} onChange={onChangeColorLine} />
       <Button onClick={onClear}>
         <TiTimes />
       </Button>
-      <h1>This is a Demo showing several ways to implement Conditional Rendering in React.</h1>
+      <h1>
+        This is a Demo showing several ways to implement Conditional Rendering
+        in React.
+      </h1>
       {/* <Button onClick={onUndo} disabled={storeIdx === 0}>
         undo
         <TiArrowForwardOutline />

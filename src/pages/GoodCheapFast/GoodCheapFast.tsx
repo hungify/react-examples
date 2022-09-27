@@ -41,19 +41,25 @@ export default function GoodCheapFast() {
     },
   ]);
 
-  const handleChecked = ({ label, checked }: { label: string; checked: boolean }) => {
+  const handleChecked = ({
+    label,
+    checked,
+  }: {
+    label: string;
+    checked: boolean;
+  }) => {
     const newCheckedList = [...checkedList];
     const index = newCheckedList.findIndex((item) => item.label === label);
-    newCheckedList[index].checked = checked;
+    newCheckedList[index]!.checked = checked;
 
     const checkedALl = newCheckedList.every((item) => item.checked);
     if (checkedALl) {
       if (label === 'Good') {
-        newCheckedList[2].checked = false;
+        newCheckedList[2]!.checked = false;
       } else if (label === 'Cheap') {
-        newCheckedList[0].checked = false;
+        newCheckedList[0]!.checked = false;
       } else if (label === 'Fast') {
-        newCheckedList[1].checked = false;
+        newCheckedList[1]!.checked = false;
       }
     }
     setCheckedList(newCheckedList);
@@ -64,7 +70,11 @@ export default function GoodCheapFast() {
       <h2>How do you want your project to be?</h2>
       {checkedList.map((item) => (
         <WrapSwitch key={item.label}>
-          <Switch checked={item.checked} onChecked={handleChecked} label={item.label} />
+          <Switch
+            checked={item.checked}
+            onChecked={handleChecked}
+            label={item.label}
+          />
           <span>{item.label}</span>
         </WrapSwitch>
       ))}
@@ -140,5 +150,6 @@ const Circle = styled.div<CircleProps>`
   left: 3px;
   align-items: center;
   justify-content: center;
-  animation: ${(props) => (props.active ? slideOn : slideOff)} 0.3s linear forwards;
+  animation: ${(props) => (props.active ? slideOn : slideOff)} 0.3s linear
+    forwards;
 `;

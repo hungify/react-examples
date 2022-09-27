@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { HiPlusCircle, HiOutlinePencilAlt, HiOutlineTrash } from 'react-icons/hi';
+import {
+  HiPlusCircle,
+  HiOutlinePencilAlt,
+  HiOutlineTrash,
+} from 'react-icons/hi';
 
 interface Note {
   id: number;
@@ -10,7 +14,7 @@ interface Note {
 
 export default function NotesApp() {
   const [notes, setNotes] = useState<Note[]>(
-    JSON.parse(window.localStorage.getItem('notes') || '[]')
+    JSON.parse(window.localStorage.getItem('notes') || '[]'),
   );
 
   useEffect(() => {
@@ -59,16 +63,16 @@ export default function NotesApp() {
   };
 
   return (
-    <div className="pt-12 bg-[#7bdaf3] relative min-h-screen">
+    <div className='pt-12 bg-[#7bdaf3] relative min-h-screen'>
       <button
-        className="py-2 px-3 inline-flex items-center rounded-md bg-[#9ec862] text-white absolute top-2 right-2"
+        className='py-2 px-3 inline-flex items-center rounded-md bg-[#9ec862] text-white absolute top-2 right-2'
         onClick={handleCreateNewNote}
       >
         <HiPlusCircle />
-        <span className="ml-1">Add note</span>
+        <span className='ml-1'>Add note</span>
       </button>
       <div
-        className="grid"
+        className='grid'
         style={{
           gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
         }}
@@ -111,42 +115,44 @@ function NoteCard({
   onNoteEdit,
   onTitleChange,
 }: NoteProps) {
-  const onBodyChange = (id: number) => (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = evt.target.value;
-    if (editing) onNoteChange(id, value);
-  };
+  const onBodyChange =
+    (id: number) => (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const value = evt.target.value;
+      if (editing) onNoteChange(id, value);
+    };
 
-  const onTitleNoteChange = (id: number) => (evt: React.ChangeEvent<HTMLSpanElement>) => {
-    const value = evt.currentTarget.textContent;
-    if (value) {
-      onTitleChange(id, value);
-    }
-  };
+  const onTitleNoteChange =
+    (id: number) => (evt: React.ChangeEvent<HTMLSpanElement>) => {
+      const value = evt.currentTarget.textContent;
+      if (value) {
+        onTitleChange(id, value);
+      }
+    };
 
   return (
-    <div className="h-[400px] w-[400px] mx-6 my-8 bg-white shadow-2xl">
-      <div className="bg-[#9ec862] h-8 relative flex justify-between items-center  p-2">
+    <div className='h-[400px] w-[400px] mx-6 my-8 bg-white shadow-2xl'>
+      <div className='bg-[#9ec862] h-8 relative flex justify-between items-center  p-2'>
         <span
           contentEditable={true}
           spellCheck={false}
           onBlur={onTitleNoteChange(id)}
-          className="outline-none"
+          className='outline-none'
           suppressContentEditableWarning={true}
         >
           {title}
         </span>
-        <div className="flex items-center gap-2">
+        <div className='flex items-center gap-2'>
           <button
-            className="h-full text-white bg-transparent flex items-center"
+            className='h-full text-white bg-transparent flex items-center'
             onClick={() => onNoteEdit(id)}
           >
-            <HiOutlinePencilAlt className="h-6 w-6" />
+            <HiOutlinePencilAlt className='h-6 w-6' />
           </button>
           <button
-            className="h-full text-white bg-transparent flex items-center"
+            className='h-full text-white bg-transparent flex items-center'
             onClick={() => onNoteRemove(id)}
           >
-            <HiOutlineTrash className="h-6 w-6" />
+            <HiOutlineTrash className='h-6 w-6' />
           </button>
         </div>
       </div>

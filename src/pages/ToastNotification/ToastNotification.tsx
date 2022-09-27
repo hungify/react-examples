@@ -1,5 +1,5 @@
 import classnames from 'classnames/bind';
-import styles from 'pages/ToastNotification/ToastNotification.module.css';
+import styles from './ToastNotification.module.css';
 import { useEffect, useState } from 'react';
 import { HiBadgeCheck } from 'react-icons/hi';
 import { BiErrorCircle } from 'react-icons/bi';
@@ -100,7 +100,7 @@ export default function ToastNotification() {
   return (
     <div className={cx('wrapper')}>
       <ToastMessage
-        position="top-right"
+        position='top-right'
         toastList={list}
         onDeleteToast={handleDeleteToast}
         // autoClose={3000}
@@ -125,11 +125,16 @@ interface ToastMessageProps {
   onDeleteToast: (id: number) => void;
   autoClose?: number;
 }
-function ToastMessage({ toastList, onDeleteToast, position, autoClose = 3000 }: ToastMessageProps) {
+function ToastMessage({
+  toastList,
+  onDeleteToast,
+  position,
+  autoClose = 3000,
+}: ToastMessageProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (toastList.length > 0) {
-        onDeleteToast(toastList[0].id);
+        toastList[0] && onDeleteToast(toastList[0].id);
       }
     }, autoClose);
     return () => clearTimeout(timer);
@@ -147,13 +152,16 @@ function ToastMessage({ toastList, onDeleteToast, position, autoClose = 3000 }: 
             key={i}
             style={{ backgroundColor: toast.backgroundColor }}
             className={cx('toast-inner', 'toast', {
-              [`${position}`]: true,
+              [position]: true,
             })}
           >
             <div className={cx('toast-header')}>
               {toast.icon}
               <p className={cx('toast-title')}>{toast.title}</p>
-              <button onClick={() => onDeleteToast(toast.id)} className="toast-btn-close">
+              <button
+                onClick={() => onDeleteToast(toast.id)}
+                className='toast-btn-close'
+              >
                 <RiCloseFill />
               </button>
             </div>

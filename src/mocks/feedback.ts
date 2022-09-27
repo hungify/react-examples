@@ -1,8 +1,8 @@
-import happy from 'assets/feedback/happy.png';
-import angry from 'assets/feedback/angry.png';
-import unhappy from 'assets/feedback/unhappy.png';
-import excited from 'assets/feedback/excited.png';
-import neutral from 'assets/feedback/neutral.png';
+import happy from '~/assets/feedback/happy.png';
+import angry from '~/assets/feedback/angry.png';
+import unhappy from '~/assets/feedback/unhappy.png';
+import excited from '~/assets/feedback/excited.png';
+import neutral from '~/assets/feedback/neutral.png';
 
 export const feedback = [
   {

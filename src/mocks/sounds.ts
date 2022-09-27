@@ -1,9 +1,9 @@
-import applause from 'assets/sounds/applause.mp3';
-import boo from 'assets/sounds/boo.mp3';
-import tada from 'assets/sounds/tada.mp3';
-import gasp from 'assets/sounds/gasp.mp3';
-import victory from 'assets/sounds/victory.mp3';
-import wrong from 'assets/sounds/wrong.mp3';
+import applause from '~/assets/sounds/applause.mp3';
+import boo from '~/assets/sounds/boo.mp3';
+import tada from '~/assets/sounds/tada.mp3';
+import gasp from '~/assets/sounds/gasp.mp3';
+import victory from '~/assets/sounds/victory.mp3';
+import wrong from '~/assets/sounds/wrong.mp3';
 
 export const sounds = [
   {

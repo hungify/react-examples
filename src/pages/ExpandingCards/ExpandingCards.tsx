@@ -1,4 +1,4 @@
-import { cards } from 'mocks/cards';
+import { cards } from '~/mocks';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 export default function ExpandingCards() {
-  const [indexActive, setIndexActive] = useState(cards[0].id);
+  const [indexActive, setIndexActive] = useState(cards[0]?.id);
 
   const handleExpand = (id: number) => {
     if (id !== indexActive) {
@@ -81,7 +81,9 @@ const CardStyled = styled.div<CardStyledProps>`
   h2 {
     margin: 0;
     ${({ active }) => `
-    transition:${active ? 'opacity 0.2s ease-in 1s' : 'opacity 0.2s ease-in 0.2s'};
+    transition:${
+      active ? 'opacity 0.2s ease-in 1s' : 'opacity 0.2s ease-in 0.2s'
+    };
     opacity: ${active ? '1' : '0'};
   `}
     position: absolute;

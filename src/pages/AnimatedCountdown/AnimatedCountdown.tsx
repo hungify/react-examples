@@ -30,15 +30,19 @@ export default function AnimatedCountdown() {
     };
   }, [active, currentIdx]);
 
-  const handleAnimationEnd = (idx: number) => (evt: React.AnimationEvent<HTMLDivElement>) => {
-    const currentItem = evt.currentTarget;
-    if (evt.animationName === 'goIn' && idx !== size - 1) {
-      currentItem.classList.remove('in');
-      currentItem.classList.add('out');
-    } else if (evt.animationName === 'goOut' && currentItem.nextElementSibling) {
-      currentItem.nextElementSibling.classList.add('in');
-    }
-  };
+  const handleAnimationEnd =
+    (idx: number) => (evt: React.AnimationEvent<HTMLDivElement>) => {
+      const currentItem = evt.currentTarget;
+      if (evt.animationName === 'goIn' && idx !== size - 1) {
+        currentItem.classList.remove('in');
+        currentItem.classList.add('out');
+      } else if (
+        evt.animationName === 'goOut' &&
+        currentItem.nextElementSibling
+      ) {
+        currentItem.nextElementSibling.classList.add('in');
+      }
+    };
 
   return (
     <div className={cx('wrapper')}>

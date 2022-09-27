@@ -1,4 +1,4 @@
-import OtpInput from 'pages/VerifyAccountUI/OtpInput';
+import OtpInput from './OtpInput';
 import { useEffect, useState } from 'react';
 
 export default function VerifyAccountUI() {
@@ -35,65 +35,65 @@ export default function VerifyAccountUI() {
   }, [errorListSize, disabledListSize]);
 
   return (
-    <div className="App">
-      <div className="flex items-center h-screen">
-        <div className="w-[250px] relative shadow-lg h-full">
-          <div className="flex justify-between p-4">
-            <label htmlFor="">numInputs</label>
+    <div className='App'>
+      <div className='flex items-center h-screen'>
+        <div className='w-[250px] relative shadow-lg h-full'>
+          <div className='flex justify-between p-4'>
+            <label htmlFor='1'>numInputs</label>
             <input
-              className="w-2/4 border-2 rounded-lg outline-none"
-              type="number"
+              className='w-2/4 border-2 rounded-lg outline-none'
+              type='number'
               value={numInputs}
               min={4}
               max={7}
               onChange={(evt) => setNumInputs(Number(evt.target.value))}
             />
           </div>
-          <div className="flex justify-between p-4">
-            <label htmlFor="">Size of error list</label>
+          <div className='flex justify-between p-4'>
+            <label htmlFor='2'>Size of error list</label>
             <input
-              className="w-2/4 border-2 rounded-lg outline-none"
-              type="number"
+              className='w-2/4 border-2 rounded-lg outline-none'
+              type='number'
               value={errorListSize}
               min={0}
               max={numInputs}
               onChange={(evt) => setErrorListSize(Number(evt.target.value))}
             />
           </div>
-          <div className="flex justify-between p-4">
-            <label htmlFor="">Size of disabled list</label>
+          <div className='flex justify-between p-4'>
+            <label htmlFor='3'>Size of disabled list</label>
             <input
-              className="w-2/4 border-2 rounded-lg outline-none"
-              type="number"
+              className='w-2/4 border-2 rounded-lg outline-none'
+              type='number'
               value={disabledListSize}
               min={0}
               max={numInputs}
               onChange={(evt) => setDisabledListSize(Number(evt.target.value))}
             />
           </div>
-          <div className="flex justify-between p-4">
-            <label htmlFor="">separator</label>
+          <div className='flex justify-between p-4'>
+            <label htmlFor='4'>separator</label>
             <input
-              className="w-2/4 border-2 rounded-lg outline-none"
-              type="text"
+              className='w-2/4 border-2 rounded-lg outline-none'
+              type='text'
               value={separator}
               onChange={(evt) => setSeparator(evt.target.value)}
             />
           </div>
-          <div className="flex justify-between p-4">
-            <label htmlFor="">isInputNum</label>
+          <div className='flex justify-between p-4'>
+            <label htmlFor='5'>isInputNum</label>
             <input
-              className="w-2/4"
-              type="checkbox"
+              className='w-2/4'
+              type='checkbox'
               checked={isInputNumber}
               onChange={(evt) => setIsInputNumber(evt.target.checked)}
             />
           </div>
-          <div className="flex justify-between p-4">
-            <label htmlFor="">isInputSecure</label>
+          <div className='flex justify-between p-4'>
+            <label htmlFor='6'>isInputSecure</label>
             <input
-              className="w-2/4"
-              type="checkbox"
+              className='w-2/4'
+              type='checkbox'
               checked={isInputSecure}
               onChange={(evt) => setIsInputSecure(evt.target.checked)}
             />
@@ -101,13 +101,13 @@ export default function VerifyAccountUI() {
         </div>
 
         <div
-          className="border-4 border-black max-w-[1000px] rounded-2xl flex items-center justify-between
-        flex-col p-7 text-center"
+          className='border-4 border-black max-w-[1000px] rounded-2xl flex items-center justify-between
+        flex-col p-7 text-center'
         >
-          <h1 className="font-medium">Verify Your Account</h1>
-          <p className="w-[600px]">
-            We emailed you the six digit code to cool_guy@email.com Enter the code below to confirm
-            your email address.
+          <h1 className='font-medium'>Verify Your Account</h1>
+          <p className='w-[600px]'>
+            We emailed you the six digit code to cool_guy@email.com Enter
+            thecode below to confirm your email address.
           </p>
           <OtpInput
             isInputNumber={isInputNumber}
@@ -116,7 +116,7 @@ export default function VerifyAccountUI() {
             disabledList={disabledList}
             errorList={errorList}
             separator={separator}
-            onChangeOtp={(otp) => {}}
+            onChangeOtp={(otp) => undefined}
             // onFinish={(otpValue: string) => {
             //   alert(`OTP value is ${otpValue}`);
             // }}

@@ -1,4 +1,4 @@
-import { socials } from 'mocks/socials';
+import { socials } from '~/mocks';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -39,20 +39,20 @@ const SocialName = styled.div`
 export default function IncrementCounter() {
   const [twitter, setTwitter] = useState({
     from: 0,
-    to: socials[0].followers,
+    to: socials[0]!.followers,
   });
   const [youtube, setYoutube] = useState({
     from: 0,
-    to: socials[1].followers,
+    to: socials[1]!.followers,
   });
   const [facebook, setFacebook] = useState({
     from: 0,
-    to: socials[2].followers,
+    to: socials[2]!.followers,
   });
 
   useEffect(() => {
     const increment = twitter.to / 200;
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       if (twitter.from < twitter.to) {
         setTwitter({
           ...twitter,
@@ -70,7 +70,7 @@ export default function IncrementCounter() {
 
   useEffect(() => {
     const increment = youtube.to / 200;
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       if (youtube.from < youtube.to) {
         setYoutube({
           ...youtube,
@@ -88,7 +88,7 @@ export default function IncrementCounter() {
 
   useEffect(() => {
     const increment = facebook.to / 200;
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       if (facebook.from < facebook.to) {
         setFacebook({
           ...facebook,
@@ -104,19 +104,19 @@ export default function IncrementCounter() {
     return () => clearInterval(timer);
   }, [facebook]);
 
+  const socialMapper: Record<string, number> = {
+    twitter: twitter.from,
+    youtube: youtube.from,
+    facebook: facebook.from,
+  };
+
   return (
     <Wrapper>
       {socials.map((social) => (
         <Social key={social.id}>
           <SocialLogo>{social.icon}</SocialLogo>
           <SocialFollower>
-            <span>
-              {social.id === 'twitter'
-                ? twitter.from
-                : social.id === 'youtube'
-                ? youtube.from
-                : facebook.from}
-            </span>
+            <span>{socialMapper[social.id]}</span>
           </SocialFollower>
           <SocialName>
             <span>{social.title}</span>

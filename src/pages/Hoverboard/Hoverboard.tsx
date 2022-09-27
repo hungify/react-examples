@@ -10,8 +10,10 @@ export default function Hoverboard() {
   const handleMouseOver = (e: React.MouseEvent<HTMLDivElement>) => {
     const square = e.currentTarget;
     const colorRand = colors[Math.floor(Math.random() * colors.length)];
-    square.style.background = colorRand;
-    square.style.boxShadow = `0 0 2px ${colorRand}, 0 0 10px ${colorRand}`;
+    if (colorRand) {
+      square.style.background = colorRand;
+      square.style.boxShadow = `0 0 2px ${colorRand}, 0 0 10px ${colorRand}`;
+    }
   };
   const handleMouseOut = (e: React.MouseEvent<HTMLDivElement>) => {
     const square = e.currentTarget;
@@ -30,6 +32,8 @@ export default function Hoverboard() {
               className={cx('square')}
               onMouseOver={handleMouseOver}
               onMouseOut={handleMouseOut}
+              onFocus={() => undefined}
+              onBlur={() => undefined}
             />
           ))}
       </div>

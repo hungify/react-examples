@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { capitalize } from 'utils/string';
+import { capitalize } from '~/utils/string';
 
 const Wrapper = styled.div`
   background: #efefbb;

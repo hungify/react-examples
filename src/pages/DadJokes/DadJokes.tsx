@@ -77,7 +77,7 @@ export default function DadJokes() {
   return (
     <Wrapper>
       <Inner>
-        <h3>Don't laugh challenge</h3>
+        <h3>Don&apos;t laugh challenge</h3>
         <JokeView>{joke ? joke : '// Joke  goes here'}</JokeView>
         <Button onClick={handleGenerateJoke}>
           <span>Get another joke</span>

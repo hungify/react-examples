@@ -35,9 +35,12 @@ export default function LiveUserFilter() {
   const usersMatch = useMemo(() => {
     return users.filter(
       (user) =>
-        user.name.first.concat(' ').concat(user.name.last).includes(filterText) ||
+        user.name.first
+          .concat(' ')
+          .concat(user.name.last)
+          .includes(filterText) ||
         user.location.city.includes(filterText) ||
-        user.location.country.includes(filterText)
+        user.location.country.includes(filterText),
     );
   }, [users, filterText]);
 
@@ -50,40 +53,40 @@ export default function LiveUserFilter() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-[#f8f9fd]">
-      <div className="w-[300px] shadow-lg rounded-md">
-        <div className="bg-[#3e57db] py-[30px] px-[20px] text-white">
-          <h4 className="font-medium">Live User Filter</h4>
-          <p className="opacity-80 mt-3">Search by name or location</p>
+    <div className='h-screen flex items-center justify-center bg-[#f8f9fd]'>
+      <div className='w-[300px] shadow-lg rounded-md'>
+        <div className='bg-[#3e57db] py-[30px] px-[20px] text-white'>
+          <h4 className='font-medium'>Live User Filter</h4>
+          <p className='opacity-80 mt-3'>Search by name or location</p>
           <input
-            type="text"
-            placeholder="Search"
-            className="py-2 px-4 mt-3 rounded-3xl w-full outline-none bg-black opacity-80 text-white
-            border-none"
+            type='text'
+            placeholder='Search'
+            className='py-2 px-4 mt-3 rounded-3xl w-full outline-none bg-black opacity-80 text-white
+            border-none'
             value={searchTerm}
             onChange={handleSearchTermChange}
           />
         </div>
 
-        <ul className="max-h-[400px] overflow-y-auto">
+        <ul className='max-h-[400px] overflow-y-auto'>
           {isFetching ||
             (isPending && (
-              <li className="flex p-5">
-                <h4 className="font-medium">Loading...</h4>
+              <li className='flex p-5'>
+                <h4 className='font-medium'>Loading...</h4>
               </li>
             ))}
           {usersMatch.map((user, i) => (
-            <li className="flex p-5" key={i}>
+            <li className='flex p-5' key={i}>
               <img
                 src={user.picture.large}
                 alt={user.name.first}
-                className="w-[50px] h-[50px] object-contain rounded-full"
+                className='w-[50px] h-[50px] object-contain rounded-full'
               />
-              <div className="flex flex-col ml-3">
-                <h2 className="font-medium mb-2">
+              <div className='flex flex-col ml-3'>
+                <h2 className='font-medium mb-2'>
                   {user.name.first} {user.name.last}
                 </h2>
-                <p className="my-2">
+                <p className='my-2'>
                   {user.location.city}, {user.location.country}
                 </p>
               </div>

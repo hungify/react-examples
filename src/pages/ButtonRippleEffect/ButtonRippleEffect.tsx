@@ -41,8 +41,9 @@ const Button = styled.button`
 `;
 
 export default function ButtonRippleEffect() {
-  const handleClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-
+  const handleClick = (
+    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     const x = evt.clientX;
     const y = evt.clientY;
 
@@ -53,8 +54,8 @@ export default function ButtonRippleEffect() {
     const yPos = y - buttonTop;
 
     const circleRef = document.createElement('span');
-    circleRef.style.top = yPos + 'px';
-    circleRef.style.left = xPos + 'px';
+    circleRef.style.top = `${yPos}px`;
+    circleRef.style.left = `${xPos}px`;
     circleRef.className = 'circle';
     evt.currentTarget.appendChild(circleRef);
 

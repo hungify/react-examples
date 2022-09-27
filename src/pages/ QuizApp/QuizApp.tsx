@@ -1,6 +1,7 @@
-import { quiz } from 'mocks';
+import { quiz } from '~/mocks';
 import { useState } from 'react';
 import styled from 'styled-components';
+import type { Question } from '~/interfaces/quiz';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -60,28 +61,21 @@ const Button = styled.button`
   color: #fff;
 `;
 
-interface Question {
-  question: string;
-  a: string;
-  b: string;
-  c: string;
-  d: string;
-  correct: string;
-}
-
 interface Answer {
   question: string;
   answer: string;
 }
 
 export default function QuizApp() {
-  const [activeQuestion, setActiveQuestion] = useState<Question>(quiz[0]);
+  const [activeQuestion, setActiveQuestion] = useState<Question>(quiz[0]!);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [done, setDone] = useState(false);
   const [score, setScore] = useState(0);
 
   const handlePick = (answer: string) => () => {
-    const foundQuestion = answers.find((aws) => aws.question === activeQuestion.question);
+    const foundQuestion = answers.find(
+      (aws) => aws.question === activeQuestion.question,
+    );
     if (foundQuestion) {
       foundQuestion.answer = answer;
       setAnswers([...answers]);
@@ -99,13 +93,13 @@ export default function QuizApp() {
   const handleSubmit = () => {
     if (done) {
       setDone(false);
-      setActiveQuestion(quiz[0]);
+      setActiveQuestion(quiz[0]!);
       setAnswers([]);
       return;
     }
 
     const foundAnswerInThisQuestion = answers.find(
-      (aws) => aws.question === activeQuestion.question
+      (aws) => aws.question === activeQuestion.question,
     )?.answer;
 
     if (foundAnswerInThisQuestion) {
@@ -142,12 +136,13 @@ export default function QuizApp() {
           <AnswerList>
             <AnswerItem>
               <input
-                type="radio"
+                type='radio'
                 id={activeQuestion.a}
                 onChange={handlePick(activeQuestion.a)}
                 checked={
-                  answers.find((aws) => aws.question === activeQuestion.question)?.answer ===
-                  activeQuestion.a
+                  answers.find(
+                    (aws) => aws.question === activeQuestion.question,
+                  )?.answer === activeQuestion.a
                 }
               />
               <label htmlFor={activeQuestion.a}>{activeQuestion.a}</label>
@@ -155,12 +150,13 @@ export default function QuizApp() {
 
             <AnswerItem>
               <input
-                type="radio"
+                type='radio'
                 id={activeQuestion.b}
                 onChange={handlePick(activeQuestion.b)}
                 checked={
-                  answers.find((aws) => aws.question === activeQuestion.question)?.answer ===
-                  activeQuestion.b
+                  answers.find(
+                    (aws) => aws.question === activeQuestion.question,
+                  )?.answer === activeQuestion.b
                 }
               />
               <label htmlFor={activeQuestion.b}>{activeQuestion.b}</label>
@@ -168,12 +164,13 @@ export default function QuizApp() {
 
             <AnswerItem>
               <input
-                type="radio"
+                type='radio'
                 id={activeQuestion.c}
                 onChange={handlePick(activeQuestion.c)}
                 checked={
-                  answers.find((aws) => aws.question === activeQuestion.question)?.answer ===
-                  activeQuestion.c
+                  answers.find(
+                    (aws) => aws.question === activeQuestion.question,
+                  )?.answer === activeQuestion.c
                 }
               />
               <label htmlFor={activeQuestion.c}>{activeQuestion.c}</label>
@@ -181,12 +178,13 @@ export default function QuizApp() {
 
             <AnswerItem>
               <input
-                type="radio"
+                type='radio'
                 id={activeQuestion.d}
                 onChange={handlePick(activeQuestion.d)}
                 checked={
-                  answers.find((aws) => aws.question === activeQuestion.question)?.answer ===
-                  activeQuestion.d
+                  answers.find(
+                    (aws) => aws.question === activeQuestion.question,
+                  )?.answer === activeQuestion.d
                 }
               />
               <label htmlFor={activeQuestion.d}>{activeQuestion.d}</label>

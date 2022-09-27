@@ -1,5 +1,5 @@
-import { useIntersectionObserver } from 'hooks';
-import KineticLoader from 'pages/KineticLoader';
+import { useIntersectionObserver } from '~/hooks';
+import KineticLoader from '~/pages/KineticLoader';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -143,28 +143,38 @@ export default function MovieApp() {
   return (
     <Wrapper>
       <Form onSubmit={handleSearch}>
-        <InputSearch value={searchTerm} onChange={handleSearchChange} placeholder="Search" />
+        <InputSearch
+          value={searchTerm}
+          onChange={handleSearchChange}
+          placeholder='Search'
+        />
       </Form>
-      {movies.length > 0 ? (
-        <MovieList>
-          {movies.map((movie) => (
-            <CardMovie
-              id={movie.id}
-              title={movie.title}
-              overview={movie.overview}
-              poster_path={movie.poster_path}
-              vote_average={movie.vote_average}
-              key={movie.id}
-            />
-          ))}
-        </MovieList>
-      ) : loading ? (
-        <KineticLoader />
-      ) : (
-        <Empty>
-          <span>Empty</span>
-        </Empty>
-      )}
+      {(() => {
+        if (loading) {
+          return <KineticLoader />;
+        }
+        if (movies.length === 0) {
+          return (
+            <Empty>
+              <span>Empty</span>
+            </Empty>
+          );
+        }
+        return (
+          <MovieList>
+            {movies.map((movie) => (
+              <CardMovie
+                id={movie.id}
+                title={movie.title}
+                overview={movie.overview}
+                posterPath={movie.poster_path}
+                voteAverage={movie.vote_average}
+                key={movie.id}
+              />
+            ))}
+          </MovieList>
+        );
+      })()}
     </Wrapper>
   );
 }
@@ -172,12 +182,18 @@ export default function MovieApp() {
 interface CardMovieProps {
   id: number;
   title: string;
-  vote_average: number;
+  voteAverage: number;
   overview: string;
-  poster_path: string;
+  posterPath: string;
 }
 
-function CardMovie({ id, title, vote_average, overview, poster_path }: CardMovieProps) {
+function CardMovie({
+  id,
+  title,
+  voteAverage,
+  overview,
+  posterPath,
+}: CardMovieProps) {
   const cardMovieRef = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
   const entry = useIntersectionObserver(imgRef, {});
@@ -191,9 +207,9 @@ function CardMovie({ id, title, vote_average, overview, poster_path }: CardMovie
     }
 
     if (isVisible) {
-      imgRef?.current?.setAttribute('src', `${IMG_PATH}${poster_path}`);
+      imgRef?.current?.setAttribute('src', `${IMG_PATH}${voteAverage}`);
     }
-  }, [entry?.intersectionRatio, isVisible, imgRef, poster_path]);
+  }, [entry?.intersectionRatio, isVisible, imgRef, posterPath, voteAverage]);
   return (
     <ItemMovie key={id} ref={cardMovieRef}>
       <Image>
@@ -201,7 +217,7 @@ function CardMovie({ id, title, vote_average, overview, poster_path }: CardMovie
       </Image>
       <Info>
         <h3>{title}</h3>
-        <span>{vote_average}</span>
+        <span>{voteAverage}</span>
       </Info>
       <Overview>
         <h3>Overview</h3>

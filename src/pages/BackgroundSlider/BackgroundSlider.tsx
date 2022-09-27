@@ -1,5 +1,5 @@
-import { sliders } from 'mocks';
-import 'pages/BackgroundSlider/BackgroundSlider.css';
+import { sliders } from '~/mocks';
+import './BackgroundSlider.css';
 import { useState } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
@@ -24,25 +24,33 @@ export default function BackgroundSlider() {
 
   return (
     <div
-      className="slider-wrapper"
+      className='slider-wrapper'
       style={{
-        backgroundImage: `url(${sliders[currentIndex].src})`,
+        backgroundImage: `url(${sliders[currentIndex]!.src})`,
       }}
     >
-      <div className="slider-container">
+      <div className='slider-container'>
         {sliders.map((sld) => (
           <div
-            className={'slide' + (currentIndex === sld.id ? ' active' : '')}
+            className={`slide${currentIndex === sld.id ? ' active' : ''}`}
             key={sld.id}
             style={{
               backgroundImage: `url(${sld.src})`,
             }}
           />
         ))}
-        <button className="arrow left-arrow" id="left" onClick={handleLeftClick}>
+        <button
+          className='arrow left-arrow'
+          id='left'
+          onClick={handleLeftClick}
+        >
           <FaArrowLeft />
         </button>
-        <button className="arrow right-arrow" id="right" onClick={handleRightClick}>
+        <button
+          className='arrow right-arrow'
+          id='right'
+          onClick={handleRightClick}
+        >
           <FaArrowRight />
         </button>
       </div>

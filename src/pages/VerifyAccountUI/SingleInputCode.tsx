@@ -1,9 +1,9 @@
-import { usePrevious } from 'hooks';
+import { usePrevious } from '~/hooks';
 import React, { memo, useCallback, useEffect, useRef } from 'react';
-import { objectKeys } from 'utils/object';
-import { keyDownShouldBe } from 'utils/string';
+import { keyDownShouldBe, objectKeys } from '~/utils';
 
-interface SingleInputCodeProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface SingleInputCodeProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   focus?: boolean;
   isError?: boolean;
   onInputDown?: (evt: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -56,7 +56,7 @@ function SingleInput({
         onInputDown && onInputDown(evt);
       }
     },
-    [onInputDown, type]
+    [onInputDown, type],
   );
 
   const handleOnChange = useCallback(
@@ -67,7 +67,7 @@ function SingleInput({
         onInputChange && onInputChange(evt);
       }
     },
-    [onInputChange]
+    [onInputChange],
   );
 
   return (

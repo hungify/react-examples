@@ -57,7 +57,13 @@ export default function AutoTextEffect() {
       <h1>{text}</h1>
       <Speed>
         <span>Speed:</span>
-        <input type="number" value={speed} onChange={handleSpeedChange} min={1} max={10} />
+        <input
+          type='number'
+          value={speed}
+          onChange={handleSpeedChange}
+          min={1}
+          max={10}
+        />
       </Speed>
     </Wrapper>
   );

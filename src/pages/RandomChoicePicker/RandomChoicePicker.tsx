@@ -59,12 +59,12 @@ export default function RandomChoicePicker() {
     <Wrapper>
       <Inner>
         <h3>
-          Enter all of the choices divided by a comma (',').
+          Enter all of the choices divided by a comma (&apos;,&apos;).
           <br />
-          Press enter when you're done
+          Press enter when you&apos;re done
         </h3>
         <TextArea
-          placeholder="Enter choices here..."
+          placeholder='Enter choices here...'
           onChange={handleChoiceChange}
           spellCheck={false}
         />

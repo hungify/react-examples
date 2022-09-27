@@ -1,5 +1,5 @@
-import { TodoAction, TodoActionType } from 'pages/TodoApp/context/todoAction';
-import { Todo, TodoState } from 'pages/TodoApp/context/TodoProvider';
+import { type TodoAction, TodoActionType } from './todoAction';
+import type { Todo, TodoState } from './TodoProvider';
 import { useCallback, useReducer } from 'react';
 
 export type Dispatch = (action: TodoAction) => void;
@@ -12,15 +12,21 @@ function TodoReducer(state: TodoState, action: TodoAction) {
         todo: [...state.todo, action.payload],
       };
 
-    case TodoActionType.removeTodo:
-      const filterTodo = state.todo.filter((todo) => todo.id !== action.payload);
+    case TodoActionType.removeTodo: {
+      const filterTodo = state.todo.filter(
+        (todo) => todo.id !== action.payload,
+      );
+
       return {
         ...state,
         todo: filterTodo,
       };
+    }
 
-    case TodoActionType.completeTodo:
-      const todoCompleted = state.todo.find((todo) => todo.id === action.payload);
+    case TodoActionType.completeTodo: {
+      const todoCompleted = state.todo.find(
+        (todo) => todo.id === action.payload,
+      );
       if (todoCompleted) {
         todoCompleted.completed = !todoCompleted.completed;
       }
@@ -28,8 +34,9 @@ function TodoReducer(state: TodoState, action: TodoAction) {
         ...state,
         todo: [...state.todo],
       };
+    }
 
-    case TodoActionType.editTodo:
+    case TodoActionType.editTodo: {
       const todoEdit = state.todo.find((todo) => todo.id === action.payload.id);
       if (todoEdit) {
         todoEdit.text = action.payload.text;
@@ -38,6 +45,7 @@ function TodoReducer(state: TodoState, action: TodoAction) {
         ...state,
         todo: [...state.todo],
       };
+    }
     default:
       return state;
   }

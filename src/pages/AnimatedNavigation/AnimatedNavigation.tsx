@@ -4,7 +4,13 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   background-color: #eafbff;
-  background-image: linear-gradient(to bottom, #eafbff 0%, #eafbff 50%, #5290f9 50%, #5290f9 100%);
+  background-image: linear-gradient(
+    to bottom,
+    #eafbff 0%,
+    #eafbff 50%,
+    #5290f9 50%,
+    #5290f9 100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,16 +102,16 @@ export default function AnimatedNavigation() {
       <Navbar isOpen={isOpen}>
         <MenuList isOpen={isOpen}>
           <MenuItem>
-            <MenuLink to="/">Home</MenuLink>
+            <MenuLink to='/'>Home</MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink to="/">Works</MenuLink>
+            <MenuLink to='/'>Works</MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink to="/">About</MenuLink>
+            <MenuLink to='/'>About</MenuLink>
           </MenuItem>
           <MenuItem>
-            <MenuLink to="/">Contact</MenuLink>
+            <MenuLink to='/'>Contact</MenuLink>
           </MenuItem>
         </MenuList>
         <Button onClick={() => setIsOpen(!isOpen)} isOpen={isOpen}>

@@ -1,4 +1,11 @@
-import React, { Fragment, memo, useCallback, useEffect, useState } from 'react';
+import React, {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import SingleInputCode from './SingleInputCode';
 
 interface OtpInputProps {
@@ -53,19 +60,19 @@ function OtpInputComponent({
         setFinished(true);
       }
     },
-    [numInputs, onChangeOtp]
+    [numInputs, onChangeOtp],
   );
 
   // Helper to return value with the right type: 'text' or 'number'
   const getRightValue = useCallback(
     (str: string) => {
-      let changedValue = str;
+      const changedValue = str;
       if (!isInputNumber || !changedValue) {
         return changedValue;
       }
       return Number(changedValue) >= 0 ? changedValue : '';
     },
-    [isInputNumber]
+    [isInputNumber],
   );
 
   // Change OTP value at focussing input
@@ -77,7 +84,7 @@ function OtpInputComponent({
       handleOtpChange(updatedOTPValues);
     },
 
-    [activeIdxInput, handleOtpChange, otpValues]
+    [activeIdxInput, handleOtpChange, otpValues],
   );
 
   // Focus on input at index
@@ -86,7 +93,7 @@ function OtpInputComponent({
       const selectedIndex = Math.max(Math.min(numInputs - 1, inputIndex), 0);
       setActiveIdxInput(selectedIndex);
     },
-    [numInputs]
+    [numInputs],
   );
 
   const focusPrevInput = useCallback(() => {
@@ -102,7 +109,7 @@ function OtpInputComponent({
     (index: number) => {
       focusInput(index);
     },
-    [focusInput]
+    [focusInput],
   );
 
   // Handle onBlur input
@@ -121,7 +128,7 @@ function OtpInputComponent({
       changeValueAtFocus(value);
       focusNextInput();
     },
-    [changeValueAtFocus, focusNextInput, getRightValue]
+    [changeValueAtFocus, focusNextInput, getRightValue],
   );
 
   // Handle onKeyDown input
@@ -157,31 +164,48 @@ function OtpInputComponent({
         }
       }
     },
-    [activeIdxInput, changeValueAtFocus, focusNextInput, focusPrevInput, otpValues]
+    [
+      activeIdxInput,
+      changeValueAtFocus,
+      focusNextInput,
+      focusPrevInput,
+      otpValues,
+    ],
   );
+  const typeMapper = useMemo(() => {
+    if (isInputNumber) {
+      return 'number';
+    } else if (isInputSecure) {
+      return 'password';
+    }
+    return 'text';
+  }, [isInputNumber, isInputSecure]);
 
   return (
-    <div {...rest} className="flex flex-wrap items-center justify-center w-full relative">
+    <div
+      {...rest}
+      className='flex flex-wrap items-center justify-center w-full relative'
+    >
       {finished && (
-        <div className="inline-flex items-center px-4 py-2 w-full h-full font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed absolute justify-center opacity-90">
+        <div className='inline-flex items-center px-4 py-2 w-full h-full font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed absolute justify-center opacity-90'>
           <svg
-            className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
+            className='animate-spin -ml-1 mr-3 h-5 w-5 text-white'
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
           >
             <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
+              className='opacity-25'
+              cx='12'
+              cy='12'
+              r='10'
+              stroke='currentColor'
+              strokeWidth='4'
             ></circle>
             <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              className='opacity-75'
+              fill='currentColor'
+              d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
             ></path>
           </svg>
           <span>Processing...</span>
@@ -190,16 +214,19 @@ function OtpInputComponent({
       {Array.from({ length: numInputs }).map((_, index) => (
         <Fragment key={index}>
           <SingleInputCode
-            type={isInputSecure ? 'password' : isInputNumber ? 'number' : 'text'}
+            type={typeMapper}
             focus={activeIdxInput === index}
             value={otpValues && otpValues[index]}
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus={autoFocus}
             onFocus={() => handleOnFocus(index)}
             onInputChange={!finished ? handleOnChange : undefined}
             onInputDown={!finished ? handleOnKeyDown : undefined}
             onBlur={onBlur}
             className={inputClassName}
-            disabled={disabled || (disabledList && disabledList.includes(index))}
+            disabled={
+              disabled || (disabledList && disabledList.includes(index))
+            }
             isError={errorList && errorList.includes(index)}
           />
           {separator && index < numInputs - 1 && <span>{separator}</span>}

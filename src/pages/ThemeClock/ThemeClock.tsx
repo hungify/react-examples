@@ -127,7 +127,15 @@ const monthNames = [
   'November',
   'December',
 ];
-const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const dayNames = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
 
 interface ThemeClockProps {
   theme: 'Dark' | 'Light';
@@ -147,11 +155,12 @@ export default function ThemeClock({ onSwitchTheme, theme }: ThemeClockProps) {
       setNow(now);
       const seconds = now.getSeconds();
       const minutes = now.getMinutes();
-      var hours = now.getHours();
+      const hours = now.getHours();
 
       const secondsDegrees = (seconds / 60) * 360;
       const minutesDegrees = (minutes / 60 + seconds / 60 / 60) * 360;
-      const hoursDegrees = (hours / 12 + minutes / 60 / 12 + seconds / 60 / 60 / 12) * 360;
+      const hoursDegrees =
+        (hours / 12 + minutes / 60 / 12 + seconds / 60 / 60 / 12) * 360;
 
       setHours(hoursDegrees);
       setMinutes(minutesDegrees);
@@ -174,24 +183,37 @@ export default function ThemeClock({ onSwitchTheme, theme }: ThemeClockProps) {
           />
           <Minutes
             theme={theme}
-            style={{ transform: ` translate(-50%, -100%) rotate(${minutes}deg)` }}
+            style={{
+              transform: ` translate(-50%, -100%) rotate(${minutes}deg)`,
+            }}
           />
           <Seconds
             theme={theme}
-            style={{ transform: `translate(-50%, -100%) rotate(${seconds}deg)` }}
+            style={{
+              transform: `translate(-50%, -100%) rotate(${seconds}deg)`,
+            }}
           />
           <CenterPoint theme={theme} />
         </Clock>
       </ClockInner>
 
       <ClockInner>
-        <ClockFace theme={theme} hours={hours} seconds={seconds} minutes={minutes} />
+        <ClockFace
+          theme={theme}
+          hours={hours}
+          seconds={seconds}
+          minutes={minutes}
+        />
       </ClockInner>
 
       <TimeView>
-        <span>{now.getHours() > 10 ? now.getHours() : `0${now.getHours()}`}</span>
+        <span>
+          {now.getHours() > 10 ? now.getHours() : `0${now.getHours()}`}
+        </span>
         <span>&nbsp;:&nbsp;</span>
-        <span>{now.getMinutes() > 10 ? now.getMinutes() : `0${now.getMinutes()}`}</span>
+        <span>
+          {now.getMinutes() > 10 ? now.getMinutes() : `0${now.getMinutes()}`}
+        </span>
         <span>&nbsp;{now.getHours() > 12 ? 'PM' : 'AM'}</span>
       </TimeView>
 
@@ -290,7 +312,10 @@ function ClockFace({ theme, hours, minutes, seconds }: ClockFaceProps) {
               transform: `rotate(${i * 6}deg)`,
             }}
           >
-            <TickMark className={`${i % 5 === 0 ? 'bold' : ''}`} theme={theme} />
+            <TickMark
+              className={`${i % 5 === 0 ? 'bold' : ''}`}
+              theme={theme}
+            />
           </TickMinute>
         ))}
       </div>

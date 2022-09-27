@@ -1,4 +1,4 @@
-import { useIntersectionObserver } from 'hooks';
+import { useIntersectionObserver } from '~/hooks';
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -24,8 +24,12 @@ function LazyLoadImage({ src, alt }: LazyLoadImageProps) {
   }, [entry?.intersectionRatio, isVisible, src]);
 
   return (
-    <div className="border-2 w-[300px] ">
-      <img ref={imgRef} alt={alt || 'random'} className="h-[300px] w-[300px] object-cover" />
+    <div className='border-2 w-[300px] '>
+      <img
+        ref={imgRef}
+        alt={alt || 'random'}
+        className='h-[300px] w-[300px] object-cover'
+      />
     </div>
   );
 }
@@ -43,17 +47,19 @@ export default function RandomImageFeed() {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen">
+    <div className='flex flex-col items-center h-screen'>
       <h1>Random Image Feed</h1>
 
-      <div className="flex items-center justify-center flex-wrap max-w-[1000px] gap-5">
+      <div className='flex items-center justify-center flex-wrap max-w-[1000px] gap-5'>
         {Array(100)
           .fill(0)
           .map((_, i) => (
             <LazyLoadImage
               key={i}
-              alt="random"
-              src={`https://source.unsplash.com/random/${size() + i}x${size() + i}`}
+              alt='random'
+              src={`https://source.unsplash.com/random/${size() + i}x${
+                size() + i
+              }`}
             />
           ))}
       </div>

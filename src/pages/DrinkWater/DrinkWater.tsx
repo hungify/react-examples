@@ -108,14 +108,15 @@ export default function DrinkWater() {
     }
   }, [waterGoal, totalCups]);
 
-  const handleCupClick = (idx: number) => (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.preventDefault();
-    if (waterGoal.indexOf(idx) === -1) {
-      setWaterGoal([...waterGoal, idx]);
-    } else {
-      setWaterGoal(waterGoal.filter((item) => item !== idx));
-    }
-  };
+  const handleCupClick =
+    (idx: number) => (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      e.preventDefault();
+      if (waterGoal.indexOf(idx) === -1) {
+        setWaterGoal([...waterGoal, idx]);
+      } else {
+        setWaterGoal(waterGoal.filter((item) => item !== idx));
+      }
+    };
 
   const liters = useMemo(() => {
     return 2 - (250 * waterGoal.length) / 1000;
@@ -144,7 +145,8 @@ export default function DrinkWater() {
               key={i}
               full={waterGoal.indexOf(i) !== -1}
               style={{
-                backgroundColor: waterGoal.indexOf(i) !== -1 ? '#6ab3f8' : '#fff',
+                backgroundColor:
+                  waterGoal.indexOf(i) !== -1 ? '#6ab3f8' : '#fff',
                 color: waterGoal.indexOf(i) !== -1 ? '#fff' : '#144fc6',
               }}
             >

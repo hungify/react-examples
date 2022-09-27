@@ -1,4 +1,4 @@
-import { Todo } from 'pages/TodoApp/context/TodoProvider';
+import type { Todo } from './TodoProvider';
 
 export enum TodoActionType {
   addTodo = 'add/todo',

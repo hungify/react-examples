@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FiClipboard } from 'react-icons/fi';
 import styled from 'styled-components';
+import { objectKeys } from '~/utils';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -68,14 +69,13 @@ const Setting = styled.li`
   }
 `;
 
-const OPTIONS = {
+type OptionKey = 'lowercase' | 'uppercase' | 'numbers' | 'specialCharacters';
+const OPTIONS: Record<OptionKey, string> = {
   lowercase: 'abcdefghijklmnopqrstuvwxyz',
   uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
   numbers: '1234567890',
   specialCharacters: '!@#$%^&*()',
 };
-
-type OptionKey = keyof typeof OPTIONS;
 type Option = Record<OptionKey, boolean>;
 
 export default function PasswordGenerator() {
@@ -93,29 +93,30 @@ export default function PasswordGenerator() {
     setPasswordLength(Number(e.target.value));
   };
 
-  const handleIncludeChange = (type: OptionKey) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (type === 'uppercase') {
-      setOptions({
-        ...options,
-        uppercase: e.target.checked,
-      });
-    } else if (type === 'lowercase') {
-      setOptions({
-        ...options,
-        lowercase: e.target.checked,
-      });
-    } else if (type === 'numbers') {
-      setOptions({
-        ...options,
-        numbers: e.target.checked,
-      });
-    } else if (type === 'specialCharacters') {
-      setOptions({
-        ...options,
-        specialCharacters: e.target.checked,
-      });
-    }
-  };
+  const handleIncludeChange =
+    (type: OptionKey) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (type === 'uppercase') {
+        setOptions({
+          ...options,
+          uppercase: e.target.checked,
+        });
+      } else if (type === 'lowercase') {
+        setOptions({
+          ...options,
+          lowercase: e.target.checked,
+        });
+      } else if (type === 'numbers') {
+        setOptions({
+          ...options,
+          numbers: e.target.checked,
+        });
+      } else if (type === 'specialCharacters') {
+        setOptions({
+          ...options,
+          specialCharacters: e.target.checked,
+        });
+      }
+    };
 
   const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -123,37 +124,40 @@ export default function PasswordGenerator() {
     window.alert('Copied to clipboard');
   };
 
-  const randomChar = (str: string) => str[Math.floor(Math.random() * str.length)];
+  const randomChar = (str: string) =>
+    str[Math.floor(Math.random() * str.length)];
 
   const shuffleArray = (arr: string[]) => arr.sort(() => Math.random() - 0.5);
 
   const generatePassword = (length: number, options: Option) => {
-    const optionsKeysLength = Object.keys(options).filter(
-      (key) => options[key as OptionKey]
+    const optionsKeysLength = objectKeys(options).filter(
+      (key) => options[key],
     ).length;
 
-    const password = [];
+    const password: string[] = [];
     let characters = '';
 
     // random password has option true for each options
-    for (const property in options) {
-      if (options[property as OptionKey]) {
-        characters += OPTIONS[property as OptionKey];
-        password.push(randomChar(OPTIONS[property as OptionKey]));
+    objectKeys(options).forEach((key) => {
+      if (options[key]) {
+        characters += OPTIONS[key];
+        const randomKey = randomChar(OPTIONS[key]);
+        randomKey && password.push(randomKey);
       }
-    }
+    });
 
     // random password to have length of passwordLength
     if (password.length < passwordLength) {
       for (let i = optionsKeysLength; i < length; i++) {
-        password.push(randomChar(characters));
+        const randomPass = randomChar(characters);
+        randomPass && password.push(randomPass);
       }
     }
 
     return shuffleArray(password).join('');
   };
 
-  const handleShuffle = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleShuffle = () => {
     const result = generatePassword(passwordLength, options);
     setResult(result);
   };
@@ -170,10 +174,11 @@ export default function PasswordGenerator() {
         </Result>
         <Settings>
           <Setting>
-            <label>Password Length</label>
+            <label htmlFor='length'>Password Length</label>
             <input
-              className="text-center"
-              type="text"
+              id='length'
+              className='text-center'
+              type='text'
               min={6}
               max={40}
               value={passwordLength}
@@ -181,33 +186,33 @@ export default function PasswordGenerator() {
             />
           </Setting>
           <Setting>
-            <label>Include uppercase letters</label>
+            <label htmlFor='uppercase'>Include uppercase letters</label>
             <input
-              type="checkbox"
+              type='checkbox'
               checked={options.uppercase}
               onChange={handleIncludeChange('uppercase')}
             />
           </Setting>
           <Setting>
-            <label>Include lowercase letters</label>
+            <label htmlFor='lowercase'>Include lowercase letters</label>
             <input
-              type="checkbox"
+              type='checkbox'
               checked={options.lowercase}
               onChange={handleIncludeChange('lowercase')}
             />
           </Setting>
           <Setting>
-            <label>Include numbers</label>
+            <label htmlFor='numbers'>Include numbers</label>
             <input
-              type="checkbox"
+              type='checkbox'
               checked={options.numbers}
               onChange={handleIncludeChange('numbers')}
             />
           </Setting>
           <Setting>
-            <label>Include symbols</label>
+            <label htmlFor='specialCharacters'>Include symbols</label>
             <input
-              type="checkbox"
+              type='checkbox'
               checked={options.specialCharacters}
               onChange={handleIncludeChange('specialCharacters')}
             />

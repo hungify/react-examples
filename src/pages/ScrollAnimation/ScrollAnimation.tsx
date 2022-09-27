@@ -1,6 +1,6 @@
 import classnames from 'classnames/bind';
-import useIntersectionObserver from 'hooks/useIntersectionObserver';
-import styles from 'pages/ScrollAnimation/ScrollAnimation.module.css';
+import { useIntersectionObserver } from '~/hooks';
+import styles from './ScrollAnimation.module.css';
 import { useRef } from 'react';
 
 const cx = classnames.bind(styles);

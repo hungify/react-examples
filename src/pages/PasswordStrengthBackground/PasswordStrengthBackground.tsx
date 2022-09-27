@@ -14,44 +14,49 @@ export default function PasswordStrengthBackground() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className='flex flex-col items-center justify-center h-screen'>
       <div
-        className="absolute w-full h-full bg-center bg-no-repeat bg-cover rounded-lg top-16 -bottom-5 -right-5 -left-5 -z-10 bg-password "
+        className='absolute w-full h-full bg-center bg-no-repeat bg-cover rounded-lg top-16 -bottom-5 -right-5 -left-5 -z-10 bg-password '
         style={{
           filter: `blur(${blurValue}px)`,
         }}
       ></div>
-      <div className="p-10 text-center bg-white rounded-md">
-        <h1 className="text-3xl">Image Password Strength</h1>
-        <p className="text-sm text-gray-700">Change the password to see the effect</p>
-        <div className="my-4 text-left">
-          <label htmlFor="email" className="text-gray-900">
+      <div className='p-10 text-center bg-white rounded-md'>
+        <h1 className='text-3xl'>Image Password Strength</h1>
+        <p className='text-sm text-gray-700'>
+          Change the password to see the effect
+        </p>
+        <div className='my-4 text-left'>
+          <label htmlFor='email' className='text-gray-900'>
             Email:
           </label>
           <input
             ref={emailRef}
-            type="text"
-            className="block w-full p-2 mt-2 border rounded"
-            id="email"
-            placeholder="Enter Email"
+            type='text'
+            className='block w-full p-2 mt-2 border rounded'
+            id='email'
+            placeholder='Enter Email'
           />
         </div>
 
-        <div className="my-4 text-left">
-          <label htmlFor="email" className="text-gray-900">
+        <div className='my-4 text-left'>
+          <label htmlFor='email' className='text-gray-900'>
             Password:
           </label>
           <input
             value={password}
             onChange={handlePasswordChange}
-            type="password"
-            className="block w-full p-2 mt-2 border rounded"
-            id="password"
-            placeholder="Enter Password"
+            type='password'
+            className='block w-full p-2 mt-2 border rounded'
+            id='password'
+            placeholder='Enter Password'
           />
         </div>
 
-        <button className="inline-block w-full py-2 mt-4 text-white bg-black rounded" type="submit">
+        <button
+          className='inline-block w-full py-2 mt-4 text-white bg-black rounded'
+          type='submit'
+        >
           Submit
         </button>
       </div>

@@ -28,5 +28,9 @@ export const TodoCtx = createContext<TodoContext>({
 TodoCtx.displayName = 'TodoContext';
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
-  return <TodoCtx.Provider value={useTodoReducer(initialState)}>{children}</TodoCtx.Provider>;
+  return (
+    <TodoCtx.Provider value={useTodoReducer(initialState)}>
+      {children}
+    </TodoCtx.Provider>
+  );
 };

@@ -1,4 +1,4 @@
-import { projects } from 'mocks';
+import { projects } from '~/mocks';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,7 +13,12 @@ export default function Home() {
   return (
     <Wrapper>
       {projects.map((p, index) => (
-        <Card title={p.title} preview={p.preview} locked={p.locked} key={index} />
+        <Card
+          title={p.title}
+          preview={p.preview}
+          locked={p.locked}
+          key={index}
+        />
       ))}
     </Wrapper>
   );
@@ -32,7 +37,9 @@ function Card({ title, preview, locked = false }: CardProps) {
       <Content>
         <h4>{title}</h4>
         {!locked && (
-          <LinkStyled to={`projects/${title.toLowerCase().replaceAll(' ', '-')}`}>
+          <LinkStyled
+            to={`projects/${title.toLowerCase().replaceAll(' ', '-')}`}
+          >
             Live Demo
           </LinkStyled>
         )}
@@ -67,12 +74,9 @@ const Content = styled.div`
   justify-content: center;
   flex-direction: column;
   transition: opacity 0.3s ease-in-out;
-
-  background-color: #0298db;
   width: 100%;
   transform: translateY(-100%);
   opacity: 0;
-  border-radius: 10px;
   row-gap: 10px;
 
   ${Container}:hover & {
@@ -82,7 +86,6 @@ const Content = styled.div`
     width: 100%;
     transform: translateY(-100%);
     opacity: 1;
-    border-radius: 10px;
   }
   h4 {
     margin: 0;

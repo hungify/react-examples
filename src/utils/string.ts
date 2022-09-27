@@ -70,10 +70,13 @@ const vietnameseCharactersLowerCase = [
 ];
 
 const vietnameseCharacters = vietnameseCharactersLowerCase.concat(
-  vietnameseCharactersLowerCase.map((char) => char.toUpperCase())
+  vietnameseCharactersLowerCase.map((char) => char.toUpperCase()),
 );
 
-export const keyDownShouldBe = (keydown: string, type: React.HTMLInputTypeAttribute): boolean => {
+export const keyDownShouldBe = (
+  keydown: string,
+  type: React.HTMLInputTypeAttribute,
+): boolean => {
   const isActionKey = actionKeys.includes(keydown);
   const isNumberKey = /^[0-9]$/.test(keydown);
   const isLatinKey = /^[a-zA-Z]$/.test(keydown);
@@ -89,6 +92,8 @@ export const keyDownShouldBe = (keydown: string, type: React.HTMLInputTypeAttrib
 
 export const capitalize = (str: string) => {
   const strArray = str.split(' ');
-  const capitalizedArray = strArray.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+  const capitalizedArray = strArray.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1),
+  );
   return capitalizedArray.join(' ');
 };

@@ -27,7 +27,13 @@ export default function FormWave() {
       <form onSubmit={handleSubmit} className={cx('inner')}>
         <h1>Please login</h1>
         <div className={cx('form-control')}>
-          <input type="email" name="email" value={email} onChange={handleEmailChange} required />
+          <input
+            type='email'
+            name='email'
+            value={email}
+            onChange={handleEmailChange}
+            required
+          />
           <label>
             {'Email'.split('').map((word, index) => (
               <span
@@ -44,8 +50,8 @@ export default function FormWave() {
 
         <div className={cx('form-control')}>
           <input
-            type="password"
-            name="password"
+            type='password'
+            name='password'
             value={password}
             onChange={handlePasswordChange}
             required
@@ -71,8 +77,8 @@ export default function FormWave() {
         </div>
 
         <div className={cx('form-control', 'form-forgot')}>
-          <p>Don't have an account?</p>
-          <Link to="/">Register</Link>
+          <p>Don&apos;t have an account?</p>
+          <Link to='/'>Register</Link>
         </div>
       </form>
     </div>

@@ -1,4 +1,4 @@
-import netflix from 'assets/logo/netflix.png';
+import netflix from '~/assets/logo/netflix.png';
 import { useState } from 'react';
 import { GoThreeBars } from 'react-icons/go';
 import styled, { css } from 'styled-components';
@@ -54,7 +54,9 @@ const Nav = css<NavbarStyled>`
   left: 0;
   height: 100vh;
   transition: transform 0.3s ease-in-out;
-  transform: ${({ showNav }) => (showNav ? 'translateX(0)' : 'translateX(-100%)')};
+  transform: ${({ showNav }) => {
+    return showNav ? 'translateX(0)' : 'translateX(-100%)';
+  }};
 `;
 
 const NavBlack = styled.div`
@@ -114,7 +116,7 @@ export default function NetflixMobileNavigation() {
       <ButtonOpen onClick={handleShowNavbar}>
         <GoThreeBars />
       </ButtonOpen>
-      <Img src={netflix} alt="netflix" />
+      <Img src={netflix} alt='netflix' />
       <Text>Mobile Navigation</Text>
       <NavBlack showNav={showNav}>
         <NavRed showNav={showNav}>
@@ -123,33 +125,33 @@ export default function NetflixMobileNavigation() {
               <ButtonClose onClick={() => setShowNav(false)}>
                 <FaTimes />
               </ButtonClose>
-              <Img src={netflix} alt="netflix" />
+              <Img src={netflix} alt='netflix' />
             </HeaderNavbar>
 
             <MenuList>
               <MenuItem>
-                <MenuItemLink to="/">Teams</MenuItemLink>
+                <MenuItemLink to='/'>Teams</MenuItemLink>
               </MenuItem>
               <MenuItem>
-                <MenuItemLink to="/">Locations</MenuItemLink>
+                <MenuItemLink to='/'>Locations</MenuItemLink>
               </MenuItem>
 
               <MenuItem>
-                <MenuItemLink to="/">Live at netflix</MenuItemLink>
+                <MenuItemLink to='/'>Live at netflix</MenuItemLink>
                 <MenuList>
                   <MenuItem>
-                    <MenuItemLink to="/">NETFLIX CULTURE MEMO</MenuItemLink>
+                    <MenuItemLink to='/'>NETFLIX CULTURE MEMO</MenuItemLink>
                   </MenuItem>
                   <MenuItem>
-                    <MenuItemLink to="/">WORK LIFE BALANCE</MenuItemLink>
-                  </MenuItem>
-
-                  <MenuItem>
-                    <MenuItemLink to="/">INCLUSION & DIVERSITY</MenuItemLink>
+                    <MenuItemLink to='/'>WORK LIFE BALANCE</MenuItemLink>
                   </MenuItem>
 
                   <MenuItem>
-                    <MenuItemLink to="/">Blog</MenuItemLink>
+                    <MenuItemLink to='/'>INCLUSION & DIVERSITY</MenuItemLink>
+                  </MenuItem>
+
+                  <MenuItem>
+                    <MenuItemLink to='/'>Blog</MenuItemLink>
                   </MenuItem>
                 </MenuList>
               </MenuItem>

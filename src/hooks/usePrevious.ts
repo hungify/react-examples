@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 
-function usePrevious<T>(value?: T) {
+export function usePrevious<T>(value?: T) {
   const ref = useRef<T>();
 
   // Store current value in ref
@@ -11,5 +11,3 @@ function usePrevious<T>(value?: T) {
   // Return previous value (happens before update in useEffect above)
   return ref.current;
 }
-
-export default usePrevious;

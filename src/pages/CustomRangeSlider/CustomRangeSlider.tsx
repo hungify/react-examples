@@ -15,7 +15,12 @@ export default function CustomRangeSlider() {
   return (
     <div className={cx('wrapper')}>
       <h1>CSS Range Slider</h1>
-      <input type="range" defaultValue={0} value={value} onChange={handleSliderChange} />
+      <input
+        type='range'
+        defaultValue={0}
+        value={value}
+        onChange={handleSliderChange}
+      />
       <div className={cx('thumb-container')}>
         <div className={cx('thumb-sub-container')}>
           <h4

@@ -1,5 +1,5 @@
-import { steps } from 'mocks/steps';
-import 'pages/ProgressStep/ProgressStep.css';
+import { steps } from '~/mocks';
+import './ProgressStep.css';
 import { useMemo, useState } from 'react';
 
 export default function ProgressStep() {
@@ -17,23 +17,31 @@ export default function ProgressStep() {
   };
 
   const width = useMemo(() => {
-    return ((stepsActive.length - 1) / (steps.length - 1)) * 100 + '%';
+    return `${((stepsActive.length - 1) / (steps.length - 1)) * 100}%`;
   }, [stepsActive]);
 
   return (
-    <div className="wrapper">
-      <div className="progress">
-        <div className="progress__steps">
-          <div className="progress__lines" style={{ width }}></div>
+    <div className='wrapper'>
+      <div className='progress'>
+        <div className='progress__steps'>
+          <div className='progress__lines' style={{ width }}></div>
           {steps.map((item) => (
-            <Step key={item.title} title={item.title} active={stepsActive.includes(item.key)} />
+            <Step
+              key={item.title}
+              title={item.title}
+              active={stepsActive.includes(item.key)}
+            />
           ))}
         </div>
-        <div className="steps-action">
-          <button className="btn" disabled={currentStep === 1} onClick={prev}>
+        <div className='steps-action'>
+          <button className='btn' disabled={currentStep === 1} onClick={prev}>
             Prev
           </button>
-          <button className="btn" disabled={currentStep === steps.length} onClick={next}>
+          <button
+            className='btn'
+            disabled={currentStep === steps.length}
+            onClick={next}
+          >
             Next
           </button>
         </div>

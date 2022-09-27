@@ -1,4 +1,4 @@
-import useTodo from 'pages/TodoApp/context';
+import useTodo from './context';
 import { useState } from 'react';
 
 interface Todo {
@@ -37,21 +37,26 @@ export default function TodoApp() {
   };
 
   return (
-    <div className="h-screen bg-[#f5f5f5] text-[#444] flex flex-col items-center justify-start">
-      <h1 className="text-[9rem] opacity-40 text-center text-purple-500 font-medium">todos</h1>
-      <div className="w-[400px] max-w-full shadow-xl">
+    <div className='h-screen bg-[#f5f5f5] text-[#444] flex flex-col items-center justify-start'>
+      <h1 className='text-[9rem] opacity-40 text-center text-purple-500 font-medium'>
+        todos
+      </h1>
+      <div className='w-[400px] max-w-full shadow-xl'>
         <form onSubmit={handleTodoSubmit}>
           <input
             value={text}
             onChange={(e) => setText(e.target.value)}
-            type="text"
-            spellCheck="false"
-            className="w-full px-8 py-4 border-none text-[#444] text-3xl focus:outline-purple-500"
+            type='text'
+            spellCheck='false'
+            className='w-full px-8 py-4 border-none text-[#444] text-3xl focus:outline-purple-500'
           />
         </form>
-        <TodoList onTodoClick={handleTodoClick} onTodoDoubleClick={handleTodoDoubleClick} />
+        <TodoList
+          onTodoClick={handleTodoClick}
+          onTodoDoubleClick={handleTodoDoubleClick}
+        />
       </div>
-      <small className="text-[#b5b5b5] mt-12 text-center">
+      <small className='text-[#b5b5b5] mt-12 text-center'>
         Left click to toggle completed.
         <br />
         Right click to delete todo
@@ -73,7 +78,7 @@ function TodoList({ onTodoClick, onTodoDoubleClick }: TodoListProps) {
   } = useTodo();
 
   return (
-    <ul className="bg-white">
+    <ul className='bg-white'>
       {todo?.map((todo: Todo) => (
         <TodoItem
           key={todo.id}
@@ -97,35 +102,37 @@ function TodoItem({ todo, onTodoClick, onTodoDoubleClick }: TodoItemProps) {
   const { id, text, completed } = todo;
   let timer: NodeJS.Timeout | null = null;
 
-  const handleTodoClick = (id: number) => (evt: React.MouseEvent<HTMLLIElement>) => {
-    if (evt.detail === 1 && !isEditing) {
-      timer = setTimeout(() => {
-        if (evt.button === 0) {
-          onTodoClick(id, 'left');
-        } else if (evt.button === 2) {
-          onTodoClick(id, 'right');
-        }
-      }, 400);
-    }
-  };
+  const handleTodoClick =
+    (id: number) => (evt: React.MouseEvent<HTMLLIElement>) => {
+      if (evt.detail === 1 && !isEditing) {
+        timer = setTimeout(() => {
+          if (evt.button === 0) {
+            onTodoClick(id, 'left');
+          } else if (evt.button === 2) {
+            onTodoClick(id, 'right');
+          }
+        }, 400);
+      }
+    };
 
-  const handleTodoDoubleClick = (id: number) => {
+  const handleTodoDoubleClick = (_id: number) => {
     if (timer) {
       clearTimeout(timer);
     }
     setIsEditing(true);
   };
 
-  const handleTodoChange = (id: number) => (evt: React.KeyboardEvent<HTMLLIElement>) => {
-    const value = evt.currentTarget.textContent;
-    const key = evt.key;
-    if (value) {
-      if (key === 'Enter') {
-        onTodoDoubleClick(id, value);
-        setIsEditing(false);
+  const handleTodoChange =
+    (id: number) => (evt: React.KeyboardEvent<HTMLLIElement>) => {
+      const value = evt.currentTarget.textContent;
+      const key = evt.key;
+      if (value) {
+        if (key === 'Enter') {
+          onTodoDoubleClick(id, value);
+          setIsEditing(false);
+        }
       }
-    }
-  };
+    };
 
   return (
     <li
@@ -138,6 +145,7 @@ function TodoItem({ todo, onTodoClick, onTodoDoubleClick }: TodoItemProps) {
       contentEditable={isEditing && !completed}
       onKeyDown={handleTodoChange(id)}
       suppressContentEditableWarning={true}
+      role='presentation'
     >
       {text}
     </li>

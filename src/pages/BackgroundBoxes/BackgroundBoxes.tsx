@@ -45,7 +45,9 @@ const Boxes = styled.div<BoxesStyled>`
   height: ${({ showOriginal }) => (showOriginal ? '600px' : '500px')};
 
   div {
-    transform: ${({ showOriginal }) => (showOriginal ? 'rotateZ(360deg)' : 'none')};
+    transform: ${({ showOriginal }) => {
+      return showOriginal ? 'rotateZ(360deg)' : 'none';
+    }};
   }
 `;
 const Box = styled.div`
@@ -89,7 +91,7 @@ for (let i = 0; i < 4; i++) {
         style={{
           backgroundPosition: `${-j * 125}px ${-i * 125}px`,
         }}
-      />
+      />,
     );
   }
 }

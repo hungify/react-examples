@@ -1,4 +1,4 @@
-import styles from 'pages/ContentPlaceholder/ContentPlaceholder.module.css';
+import styles from './ContentPlaceholder.module.css';
 import { useEffect, useState } from 'react';
 import classes from 'classnames/bind';
 
@@ -25,8 +25,8 @@ export default function ContentPlaceholder() {
           >
             {!showSkeleton ? (
               <img
-                src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2102&amp;q=80"
-                alt=""
+                src='https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=2102&amp;q=80'
+                alt=''
               />
             ) : null}
           </div>
@@ -48,9 +48,9 @@ export default function ContentPlaceholder() {
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore perferendis'
               ) : (
                 <>
-                  <span className="animated-bg animated-bg-text">&nbsp;</span>
-                  <span className="animated-bg animated-bg-text">&nbsp;</span>
-                  <span className="animated-bg animated-bg-text">&nbsp;</span>
+                  <span className='animated-bg animated-bg-text'>&nbsp;</span>
+                  <span className='animated-bg animated-bg-text'>&nbsp;</span>
+                  <span className='animated-bg animated-bg-text'>&nbsp;</span>
                 </>
               )}
             </p>
@@ -61,7 +61,10 @@ export default function ContentPlaceholder() {
                 })}
               >
                 {!showSkeleton ? (
-                  <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="" />
+                  <img
+                    src='https://randomuser.me/api/portraits/men/45.jpg'
+                    alt=''
+                  />
                 ) : null}
               </div>
               <div className={cx('card-info')}>

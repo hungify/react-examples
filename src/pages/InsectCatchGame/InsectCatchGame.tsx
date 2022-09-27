@@ -1,4 +1,4 @@
-import { insectList } from 'mocks';
+import { insectList } from '~/mocks';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -142,8 +142,9 @@ export default function InsectCatchGame() {
   const handleCatchInsect = () => {
     setScore(score + 1);
     const firstInsect =
-      insectList.find((insect) => insect.name === insects[0].name) || insectList[0];
-    setInsects([...insects, firstInsect]);
+      insectList.find((insect) => insect.name === insects[0]!.name) ||
+      insectList[0];
+    firstInsect && setInsects([...insects, firstInsect]);
   };
 
   const handlePlayAgain = () => {
@@ -186,7 +187,7 @@ interface ChoiceScreenProps {
 function ChoiceScreen({ screen, onChoice }: ChoiceScreenProps) {
   return (
     <Screen isUp={screen >= 2}>
-      <h1>What is your "favorite" insect?</h1>
+      <h1>What is your &quot;favorite&quot; insect?</h1>
       <List>
         {insectList.map(({ name, img }) => (
           <Item key={name}>
@@ -298,7 +299,7 @@ interface FinishGameMessageProps {
 function FinishGameMessage({ score, onPlayAgain }: FinishGameMessageProps) {
   return (
     <Message className={`${score >= 20 ? 'show' : ''}`}>
-      Are you annnoyed yet? <br />
+      Are you annoyed yet? <br />
       You are playing an impossible game!!
       <br />
       <Button onClick={onPlayAgain}>Play again</Button>

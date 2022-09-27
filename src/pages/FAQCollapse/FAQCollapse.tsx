@@ -1,4 +1,4 @@
-import Expandable from 'pages/FAQCollapse/Expandable';
+import Expandable from './Expandable';
 import { useState } from 'react';
 
 const information = [
@@ -29,14 +29,16 @@ export default function FAQCollapse() {
     }
   };
   return (
-    <div className="mx-auto my-0 max-w-[600px]">
-      <h1 className="text-center font-medium">Frequently Asked Questions</h1>
+    <div className='mx-auto my-0 max-w-[600px]'>
+      <h1 className='text-center font-medium'>Frequently Asked Questions</h1>
       {information?.map(({ title, text }, index) => (
         <Expandable
           shouldExpand={activeIndex?.indexOf(index) !== -1}
           onExpand={handleExpand}
           key={index}
-          className={`${activeIndex?.indexOf(index) !== -1 ? 'Expandable-active' : ''}`}
+          className={`${
+            activeIndex?.indexOf(index) !== -1 ? 'Expandable-active' : ''
+          }`}
         >
           <Expandable.Header>
             <h3>{title}</h3>

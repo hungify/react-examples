@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { verticalSliders } from 'mocks/sliders';
+import { verticalSliders } from '~/mocks';
 import { useRef, useState } from 'react';
 import { HiOutlineArrowSmDown, HiOutlineArrowSmUp } from 'react-icons/hi';
 import styles from './DoubleVerticalSlider.module.css';
@@ -14,7 +14,8 @@ export default function DoubleVerticalSlider() {
   const slideLeft = useRef<HTMLDivElement>(null);
 
   const changeSlide = (direction: string) => () => {
-    const sliderHeight = slideContainer.current && slideContainer.current.clientHeight;
+    const sliderHeight =
+      slideContainer.current && slideContainer.current.clientHeight;
 
     if (direction === 'down') {
       setActiveIndex(activeIndex - 1);
@@ -28,8 +29,12 @@ export default function DoubleVerticalSlider() {
       }
     }
     if (slideRight.current && slideLeft.current && sliderHeight) {
-      slideRight.current.style.transform = `translateY(-${activeIndex * sliderHeight}px)`;
-      slideLeft.current.style.transform = `translateY(${activeIndex * sliderHeight}px)`;
+      slideRight.current.style.transform = `translateY(-${
+        activeIndex * sliderHeight
+      }px)`;
+      slideLeft.current.style.transform = `translateY(${
+        activeIndex * sliderHeight
+      }px)`;
     }
   };
   return (
@@ -43,7 +48,10 @@ export default function DoubleVerticalSlider() {
           }}
         >
           {verticalSliders.map((slider) => (
-            <div style={{ backgroundColor: `${slider.background}` }} key={slider.id}>
+            <div
+              style={{ backgroundColor: `${slider.background}` }}
+              key={slider.id}
+            >
               <h1>{slider.title}</h1>
               <p>{slider.desc}</p>
             </div>

@@ -109,7 +109,9 @@ export default function GithubProfiles() {
 
   useEffect(() => {
     const getGithubProfile = async (searchText: string) => {
-      const response = await fetch(`https://api.github.com/users/${searchText}`);
+      const response = await fetch(
+        `https://api.github.com/users/${searchText}`,
+      );
       const data = await response.json();
       setProfile(data);
     };
@@ -121,7 +123,9 @@ export default function GithubProfiles() {
 
   useEffect(() => {
     const getRepos = async (loginName: string) => {
-      const response = await fetch(`https://api.github.com/users/${loginName}/repos?sort=created`);
+      const response = await fetch(
+        `https://api.github.com/users/${loginName}/repos?sort=created`,
+      );
       const data = await response.json();
       setRepositories(data.slice(0, 5));
     };
@@ -137,15 +141,15 @@ export default function GithubProfiles() {
   return (
     <Wrapper>
       <Input
-        type="text"
-        placeholder="Search a Github User"
+        type='text'
+        placeholder='Search a Github User'
         onChange={handleSearch}
         value={searchText}
       />
       {profile && (
         <Card>
           <Avatar>
-            <img src={profile.avatar_url} alt="avatar" />
+            <img src={profile.avatar_url} alt='avatar' />
           </Avatar>
           <Info>
             <h1>{profile.name}</h1>
@@ -166,7 +170,11 @@ export default function GithubProfiles() {
             </UL>
             <Repositories>
               {repositories.map((repo) => (
-                <TagLink href={repo.html_url} target="_blank">
+                <TagLink
+                  href={repo.html_url}
+                  target='_blank'
+                  key={repo.html_url}
+                >
                   {repo.name}
                 </TagLink>
               ))}
