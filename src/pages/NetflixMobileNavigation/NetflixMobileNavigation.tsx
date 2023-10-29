@@ -1,6 +1,6 @@
 import netflix from '~/assets/logo/netflix.png';
 import { useState } from 'react';
-import { GoThreeBars } from 'react-icons/go';
+import { BsThreeDots } from 'react-icons/bs';
 import styled, { css } from 'styled-components';
 import { FaTimes } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -114,7 +114,7 @@ export default function NetflixMobileNavigation() {
   return (
     <Wrapper>
       <ButtonOpen onClick={handleShowNavbar}>
-        <GoThreeBars />
+        <BsThreeDots />
       </ButtonOpen>
       <Img src={netflix} alt='netflix' />
       <Text>Mobile Navigation</Text>

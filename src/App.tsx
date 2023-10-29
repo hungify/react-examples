@@ -57,6 +57,7 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyles from '~/styles/GlobalStyles';
 import Navigation from '~/components/Navigation';
 import Boards from './pages/Boards/Boards';
+import KanbanBoard from './pages/KanbanBoard';
 
 const lightTheme = {
   body: '#FFF',
@@ -177,6 +178,7 @@ function App() {
               }
             />
             <Route path='boards' element={<Boards />} />
+            <Route path=' ' element={<KanbanBoard />} />
           </Route>
           <Route
             path='*'

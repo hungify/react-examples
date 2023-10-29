@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GoThreeBars, GoX } from 'react-icons/go';
+import { BsThreeDots, BsX } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { AiTwotoneHome } from 'react-icons/ai';
 import { RiUser5Fill } from 'react-icons/ri';
@@ -25,14 +25,14 @@ export default function RotatingNavigationAnimation() {
               onClick={() => setIsOpen(!isOpen)}
               className={`absolute h-[100px] bg-transparent text-2xl border-none text-white px-2 py-1 origin-top-left rotate-90 top-[60%] left-[50%]`}
             >
-              <GoX />
+              <BsX />
             </button>
 
             <button
               onClick={() => setIsOpen(!isOpen)}
               className='absolute h-[100px] bg-transparent text-2xl border-none text-white px-2 py-1 left-[60%] top-[50%]'
             >
-              <GoThreeBars />
+              <BsThreeDots />
             </button>
           </div>
         </div>
