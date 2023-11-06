@@ -354,7 +354,7 @@ export const projects = [
   },
   {
     id: 51,
-    title: 'Boards',
+    title: 'Kanban',
     preview: BoardsPreview,
     locked: false,
   },

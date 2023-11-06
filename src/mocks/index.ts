@@ -9,4 +9,3 @@ export * from './feedback';
 export * from './insect';
 export * from './socials';
 export * from './sounds';
-export * from './dragItems';
